@@ -1,17 +1,20 @@
 package com.example.todoapp.presentation.screen.todolist
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -27,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,22 +50,28 @@ fun TodoListScreen(
     val viewModel: TodoListViewModel = viewModel(factory = TodoListViewModel.Factory)
 
     Screen(
-        items = viewModel.items.collectAsState().value,
+        items = viewModel.items.collectAsState().value ?: emptyList(),
+        showCompletedTasks = viewModel.showCompletedTasks.collectAsState().value,
         screenState = viewModel.screenState.collectAsState().value,
 
         onItemClick = navigateToItem,
+        onItemCheckBoxClick = { id, completed ->
+            viewModel.changeItemCompletionStatus(id, completed)
+        },
         onFabClick = navigateToItemCreate,
+        onChangeCompletedTasksVisibilityClick = { viewModel.changeCompletedTasksVisibility() },
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Screen(
-    items: List<TodoItem>? = emptyList(),
+    items: List<TodoItem> = emptyList(),
     showCompletedTasks: Boolean = true,
     screenState: TodoListScreenState = TodoListScreenState.EMPTY,
 
     onItemClick: (String) -> Unit = {},
+    onItemCheckBoxClick: (id: String, done: Boolean) -> Unit = { _, _ -> },
     onFabClick: () -> Unit = {},
     onChangeCompletedTasksVisibilityClick: () -> Unit = {},
 ) {
@@ -113,12 +123,43 @@ private fun Screen(
                 }
 
                 TodoListScreenState.VIEW -> {
-                    Card {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            items(items ?: emptyList()) { item ->
-                                TodoListItem(item = item, onClick = { onItemClick(item.id) })
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(vertical = 24.dp, horizontal = 16.dp),
+                    ) {
+                        if (items.isNotEmpty()) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(8.dp)
+                                        .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                                )
+                            }
+                        }
+                        items(items) { item ->
+                            TodoListItem(
+                                item = item,
+                                onCheckedChange = { done ->
+                                    onItemCheckBoxClick(item.id, done)
+                                },
+                            ) { onItemClick(item.id) }
+                        }
+                        if (items.isNotEmpty()) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(8.dp)
+                                        .clip(
+                                            RoundedCornerShape(
+                                                bottomStart = 8.dp,
+                                                bottomEnd = 8.dp
+                                            )
+                                        )
+                                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                                )
                             }
                         }
                     }

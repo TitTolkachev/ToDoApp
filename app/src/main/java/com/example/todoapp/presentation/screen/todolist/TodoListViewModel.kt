@@ -6,25 +6,61 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.todoapp.App
+import com.example.todoapp.data.model.TodoItem
 import com.example.todoapp.data.repository.TodoItemsRepository
 import com.example.todoapp.presentation.screen.todolist.model.TodoListScreenState.EMPTY
 import com.example.todoapp.presentation.screen.todolist.model.TodoListScreenState.LOADING
 import com.example.todoapp.presentation.screen.todolist.model.TodoListScreenState.VIEW
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class TodoListViewModel(todoItemsRepository: TodoItemsRepository) : ViewModel() {
+class TodoListViewModel(
+    private val todoItemsRepository: TodoItemsRepository
+) : ViewModel() {
 
     private val _screenState = MutableStateFlow(LOADING)
     val screenState = _screenState.asStateFlow()
 
-    val items = todoItemsRepository.items.onEach { list ->
-        _screenState.update { if (list.isEmpty()) EMPTY else VIEW }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    private val _showCompletedTasks = MutableStateFlow(true)
+    val showCompletedTasks = _showCompletedTasks.asStateFlow()
+
+    /** Все элементы. */
+    private val _allItems = todoItemsRepository.items.onStart { delay(1000L) }
+
+    /** Элементы, показываемые на экране. */
+    private val _items: MutableStateFlow<List<TodoItem>?> = MutableStateFlow(null)
+    val items = _items.asStateFlow()
+
+    init {
+        listenToTaskList()
+    }
+
+    fun changeCompletedTasksVisibility() {
+        _showCompletedTasks.update { !it }
+    }
+
+    fun changeItemCompletionStatus(
+        itemId: String,
+        completed: Boolean
+    ) = viewModelScope.launch {
+        val item = _items.value?.firstOrNull { it.id == itemId } ?: return@launch
+        todoItemsRepository.updateItem(item.copy(done = completed))
+    }
+
+    private fun listenToTaskList() = combine(
+        _showCompletedTasks,
+        _allItems,
+    ) { showCompletedTasks, list ->
+        val itemsToShow = list.filter { showCompletedTasks || !it.done }
+        _items.update { itemsToShow }
+        _screenState.update { if (itemsToShow.isNotEmpty()) VIEW else EMPTY }
+    }.launchIn(viewModelScope)
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
