@@ -25,6 +25,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -81,24 +82,10 @@ private fun Screen(
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopAppBar(
-                title = { Text(text = "Мои дела") },
-                actions = {
-                    IconButton(onClick = onChangeCompletedTasksVisibilityClick) {
-                        if (showCompletedTasks) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_invisible_24),
-                                contentDescription = "Скрыть выполненные задачи"
-                            )
-                        } else {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_visible_24),
-                                contentDescription = "Показать выполненные задачи"
-                            )
-                        }
-                    }
-                },
-                scrollBehavior = scrollBehavior
+            TopBar(
+                scrollBehavior = scrollBehavior,
+                showCompletedTasks = showCompletedTasks,
+                onChangeCompletedTasksVisibilityClick = onChangeCompletedTasksVisibilityClick,
             )
         },
         floatingActionButton = {
@@ -116,72 +103,106 @@ private fun Screen(
             label = "TodoListScreen Content",
         ) {
             when (it) {
-                TodoListScreenState.LOADING -> {
-                    Box(Modifier.fillMaxSize()) {
-                        CircularProgressIndicator(Modifier.align(Alignment.Center))
-                    }
-                }
-
-                TodoListScreenState.VIEW -> {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(vertical = 24.dp, horizontal = 16.dp),
-                    ) {
-                        if (items.isNotEmpty()) {
-                            item {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(8.dp)
-                                        .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
-                                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                                )
-                            }
-                        }
-                        items(items) { item ->
-                            TodoListItem(
-                                item = item,
-                                onCheckedChange = { done ->
-                                    onItemCheckBoxClick(item.id, done)
-                                },
-                            ) { onItemClick(item.id) }
-                        }
-                        if (items.isNotEmpty()) {
-                            item {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(8.dp)
-                                        .clip(
-                                            RoundedCornerShape(
-                                                bottomStart = 8.dp,
-                                                bottomEnd = 8.dp
-                                            )
-                                        )
-                                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                                )
-                            }
-                        }
-                    }
-                }
-
-                TodoListScreenState.EMPTY -> {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Spacer(Modifier.weight(2f))
-                        Text(
-                            text = "Список пуст",
-                            style = MaterialTheme.typography.displaySmall,
-                        )
-                        Spacer(Modifier.height(8.dp))
-                        Text(text = "Добавляйте элементы в ваш список дел")
-                        Spacer(Modifier.weight(3f))
-                    }
-                }
+                TodoListScreenState.LOADING -> ScreenLoading()
+                TodoListScreenState.VIEW -> ScreenView(items, onItemCheckBoxClick, onItemClick)
+                TodoListScreenState.EMPTY -> ScreenEmpty()
             }
         }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun TopBar(
+    scrollBehavior: TopAppBarScrollBehavior,
+    showCompletedTasks: Boolean,
+    onChangeCompletedTasksVisibilityClick: () -> Unit,
+) {
+    TopAppBar(
+        title = { Text(text = "Мои дела") },
+        actions = {
+            IconButton(onClick = onChangeCompletedTasksVisibilityClick) {
+                if (showCompletedTasks) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_invisible_24),
+                        contentDescription = "Скрыть выполненные задачи"
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_visible_24),
+                        contentDescription = "Показать выполненные задачи"
+                    )
+                }
+            }
+        },
+        scrollBehavior = scrollBehavior
+    )
+}
+
+
+@Composable
+private fun ScreenLoading() {
+    Box(Modifier.fillMaxSize()) {
+        CircularProgressIndicator(Modifier.align(Alignment.Center))
+    }
+}
+
+@Composable
+private fun ScreenView(
+    items: List<TodoItem>,
+    onItemCheckBoxClick: (id: String, done: Boolean) -> Unit,
+    onItemClick: (String) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(vertical = 24.dp, horizontal = 16.dp),
+    ) {
+        if (items.isNotEmpty()) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp)
+                        .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                )
+            }
+        }
+        items(items) { item ->
+            TodoListItem(
+                item = item,
+                onClick = { onItemClick(item.id) },
+                onCheckedChange = { done -> onItemCheckBoxClick(item.id, done) },
+            )
+        }
+        if (items.isNotEmpty()) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp)
+                        .clip(RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp))
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ScreenEmpty() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(Modifier.weight(2f))
+        Text(
+            text = "Список пуст",
+            style = MaterialTheme.typography.displaySmall,
+        )
+        Spacer(Modifier.height(8.dp))
+        Text(text = "Добавляйте элементы в ваш список дел")
+        Spacer(Modifier.weight(3f))
     }
 }
 
