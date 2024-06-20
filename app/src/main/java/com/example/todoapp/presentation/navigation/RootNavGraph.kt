@@ -31,29 +31,30 @@ fun RootNavGraph(
         ) {
             TodoListScreen(
                 navigateToItem = { todoItemId ->
-                    navController.navigate(route = Screen.TodoItem.route + "/$todoItemId") {
+                    navController.navigate(route = Screen.TodoItem.route + "?todoItemId=$todoItemId") {
                         launchSingleTop = true
                     }
                 },
                 navigateToItemCreate = {
-                    navController.navigate(route = Screen.TodoItem.route + "/null") {
+                    navController.navigate(route = Screen.TodoItem.route) {
                         launchSingleTop = true
                     }
                 }
             )
         }
         composable(
-            route = Screen.TodoItem.route + "/{todo_item_id}",
+            route = Screen.TodoItem.route + "?todoItemId={todoItemId}",
             arguments = listOf(
-                navArgument("todo_item_id") {
+                navArgument("todoItemId") {
                     type = NavType.StringType
                     nullable = true
                     defaultValue = null
                 }
             )
         ) {
+            val todoItemId = it.arguments?.getString("todoItemId")
             TodoItemScreen(
-                backStackEntry = it,
+                todoItemId = todoItemId,
                 navigateBack = { navController.navigateUp() },
             )
         }

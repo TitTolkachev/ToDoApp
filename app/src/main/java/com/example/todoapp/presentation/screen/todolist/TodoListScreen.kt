@@ -162,8 +162,8 @@ private fun ScreenView(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(8.dp)
-                        .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                        .height(16.dp)
+                        .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                         .background(MaterialTheme.colorScheme.surfaceVariant)
                 )
             }
@@ -180,8 +180,8 @@ private fun ScreenView(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(8.dp)
-                        .clip(RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp))
+                        .height(16.dp)
+                        .clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp))
                         .background(MaterialTheme.colorScheme.surfaceVariant)
                 )
             }

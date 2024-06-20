@@ -4,9 +4,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Delete
@@ -29,6 +35,8 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,47 +46,62 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavBackStackEntry
+import com.example.todoapp.data.model.Importance
 import com.example.todoapp.data.model.Importance.HIGH
 import com.example.todoapp.data.model.Importance.LOW
 import com.example.todoapp.data.model.Importance.MEDIUM
 import com.example.todoapp.presentation.common.noRippleClickable
 import com.example.todoapp.presentation.screen.todoitem.TodoItemViewModel.Companion.Factory
+import com.example.todoapp.presentation.screen.todoitem.model.TodoItemScreenMode.EDIT
 import com.example.todoapp.presentation.theme.AppTheme
-import java.text.SimpleDateFormat
-import java.util.Date
 
 @Composable
 fun TodoItemScreen(
-    backStackEntry: NavBackStackEntry,
+    todoItemId: String? = null,
     navigateBack: () -> Unit,
 ) {
-    val viewModel: TodoItemViewModel = viewModel(factory = Factory(backStackEntry.savedStateHandle))
+    val viewModel: TodoItemViewModel = viewModel(factory = Factory(todoItemId))
+
+    LaunchedEffect(Unit) {
+        viewModel.navigateBack.collect {
+            navigateBack()
+        }
+    }
 
     Screen(
-        deleteEnabled = false,
+        text = viewModel.text.collectAsState().value,
+        importance = viewModel.importance.collectAsState().value,
+        deadline = viewModel.deadline.collectAsState().value,
+        deleteEnabled = { viewModel.mode == EDIT },
 
         onNavigateBackClick = navigateBack,
         onSaveClick = { viewModel.saveItem() },
         onDeleteClick = { viewModel.deleteItem() },
+        onTextChange = { viewModel.onTextChange(it) },
+        onImportanceChange = { viewModel.onImportanceChange(it) },
+        onDeadlineChange = { viewModel.onDeadlineChange(it) },
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Screen(
-    deleteEnabled: Boolean = false,
+    text: String = "",
+    importance: Importance = HIGH,
+    deadline: String? = null,
+    deleteEnabled: () -> Boolean = { false },
 
     onNavigateBackClick: () -> Unit = {},
     onSaveClick: () -> Unit = {},
     onDeleteClick: () -> Unit = {},
+    onTextChange: (text: String) -> Unit = {},
+    onImportanceChange: (importance: Importance) -> Unit = {},
+    onDeadlineChange: (deadline: Long?) -> Unit = {},
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-
-                },
+                title = { },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBackClick) {
                         Icon(
@@ -96,18 +119,24 @@ private fun Screen(
                     }
                 }
             )
-        }
+        },
+        contentWindowInsets = WindowInsets.safeDrawing,
     ) { paddingValues ->
         Column(
             Modifier
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(horizontal = 16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
-            var text by remember { mutableStateOf("") }
+            var dropDownMenuVisible by remember { mutableStateOf(false) }
+            var datePickerVisible by remember { mutableStateOf(false) }
+
+            Spacer(Modifier.height(16.dp))
+
             Card {
                 TextField(
                     value = text,
-                    onValueChange = { text = it },
+                    onValueChange = onTextChange,
                     modifier = Modifier.fillMaxWidth(),
                     colors = TextFieldDefaults.colors(
                         focusedIndicatorColor = Color.Transparent,
@@ -118,10 +147,12 @@ private fun Screen(
 
             Spacer(Modifier.height(16.dp))
 
-            var show by remember { mutableStateOf(false) }
-            var importance by remember { mutableStateOf(MEDIUM) }
             Box {
-                Column(Modifier.noRippleClickable { show = true }) {
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .noRippleClickable { dropDownMenuVisible = true }
+                ) {
                     Text(
                         text = "Важность",
                         style = MaterialTheme.typography.bodyLarge,
@@ -136,18 +167,18 @@ private fun Screen(
                     )
                 }
                 DropdownMenu(
-                    expanded = show,
-                    onDismissRequest = { show = false }
+                    expanded = dropDownMenuVisible,
+                    onDismissRequest = { dropDownMenuVisible = false }
                 ) {
                     DropdownMenuItem(text = {
                         Text(text = "Нет")
-                    }, onClick = { importance = MEDIUM; show = false })
+                    }, onClick = { onImportanceChange(MEDIUM); dropDownMenuVisible = false })
                     DropdownMenuItem(text = {
                         Text(text = "Низкий")
-                    }, onClick = { importance = LOW; show = false })
+                    }, onClick = { onImportanceChange(LOW); dropDownMenuVisible = false })
                     DropdownMenuItem(text = {
                         Text(text = "Высокий")
-                    }, onClick = { importance = HIGH; show = false })
+                    }, onClick = { onImportanceChange(HIGH); dropDownMenuVisible = false })
                 }
             }
 
@@ -155,27 +186,20 @@ private fun Screen(
             HorizontalDivider()
             Spacer(Modifier.height(16.dp))
 
-            var date by remember { mutableStateOf("") }
-            var visible by remember { mutableStateOf(false) }
-            val datePickerState = rememberDatePickerState()
-
-            val dateFormat = remember {
-                SimpleDateFormat("d MMMM yyyy", java.util.Locale.getDefault())
-            }
-
-            if (visible) {
+            if (datePickerVisible) {
+                val datePickerState = rememberDatePickerState()
                 DatePickerDialog(
-                    onDismissRequest = { visible = false },
+                    onDismissRequest = { datePickerVisible = false },
                     confirmButton = {
                         TextButton(onClick = {
-                            date = dateFormat.format(Date(datePickerState.selectedDateMillis ?: 0))
-                            visible = false
+                            onDeadlineChange(datePickerState.selectedDateMillis)
+                            datePickerVisible = false
                         }) {
                             Text(text = "ПРИМЕНИТЬ")
                         }
                     },
                     dismissButton = {
-                        TextButton(onClick = { visible = false }) {
+                        TextButton(onClick = { datePickerVisible = false }) {
                             Text(text = "ОТМЕНА")
                         }
                     }
@@ -190,33 +214,38 @@ private fun Screen(
                         text = "Сделать до",
                         style = MaterialTheme.typography.bodyLarge,
                     )
-                    if (date.isNotBlank()) {
+                    if (!deadline.isNullOrBlank()) {
                         Text(
-                            text = date,
+                            text = deadline,
                             style = MaterialTheme.typography.labelMedium
                         )
                     }
                 }
                 Spacer(Modifier.weight(1f))
                 Switch(
-                    checked = date.isNotBlank() || visible,
+                    checked = !deadline.isNullOrBlank() || datePickerVisible,
                     onCheckedChange = {
-                        if (it) visible = true
-                        else date = ""
+                        if (it) datePickerVisible = true
+                        else onDeadlineChange(null)
                     }
                 )
             }
 
-            if (deleteEnabled) {
+            if (deleteEnabled()) {
+                Spacer(Modifier.height(16.dp))
                 HorizontalDivider()
                 TextButton(onClick = onDeleteClick) {
                     Icon(
+                        modifier = Modifier.size(24.dp),
                         imageVector = Icons.Rounded.Delete,
                         contentDescription = "Удалить TODO элемент"
                     )
+                    Spacer(Modifier.width(12.dp))
                     Text(text = "Удалить")
                 }
             }
+
+            Spacer(Modifier.height(32.dp))
         }
     }
 }
