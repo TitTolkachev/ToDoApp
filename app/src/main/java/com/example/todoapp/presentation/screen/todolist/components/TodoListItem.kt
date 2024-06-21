@@ -2,10 +2,11 @@ package com.example.todoapp.presentation.screen.todolist.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,6 +16,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
@@ -28,7 +30,9 @@ import com.example.todoapp.data.model.Importance.MEDIUM
 import com.example.todoapp.data.model.TodoItem
 import com.example.todoapp.presentation.common.noRippleClickable
 import com.example.todoapp.presentation.theme.AppTheme
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 @Composable
 fun TodoListItem(
@@ -70,8 +74,7 @@ fun TodoListItem(
             }
         }
 
-
-        Box(
+        Column(
             Modifier
                 .fillMaxWidth()
                 .noRippleClickable(onClick = onClick)
@@ -81,6 +84,13 @@ fun TodoListItem(
             } else {
                 BasicText(text = item.text)
             }
+
+            Spacer(Modifier.height(2.dp))
+
+            item.deadline?.let {
+                Deadline(it)
+            }
+
         }
 
         Spacer(Modifier.width(12.dp))
@@ -111,6 +121,20 @@ private fun CrossedText(
             textDecoration = TextDecoration.LineThrough
         ),
         maxLines = 3,
+        overflow = TextOverflow.Ellipsis,
+    )
+}
+
+@Composable
+private fun Deadline(date: Date) {
+    val formatter = remember {
+        SimpleDateFormat("d MMMM yyyy", Locale.getDefault())
+    }
+    Text(
+        text = formatter.format(date),
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        style = MaterialTheme.typography.bodySmall,
+        maxLines = 1,
         overflow = TextOverflow.Ellipsis,
     )
 }

@@ -53,6 +53,7 @@ fun TodoListScreen(
     Screen(
         items = viewModel.items.collectAsState().value ?: emptyList(),
         showCompletedTasks = viewModel.showCompletedTasks.collectAsState().value,
+        completedTasksCount = viewModel.completedTasksCount.collectAsState().value,
         screenState = viewModel.screenState.collectAsState().value,
 
         onItemClick = navigateToItem,
@@ -69,6 +70,7 @@ fun TodoListScreen(
 private fun Screen(
     items: List<TodoItem> = emptyList(),
     showCompletedTasks: Boolean = true,
+    completedTasksCount: Int = 0,
     screenState: TodoListScreenState = TodoListScreenState.EMPTY,
 
     onItemClick: (String) -> Unit = {},
@@ -85,6 +87,7 @@ private fun Screen(
             TopBar(
                 scrollBehavior = scrollBehavior,
                 showCompletedTasks = showCompletedTasks,
+                completedTasksCount = completedTasksCount,
                 onChangeCompletedTasksVisibilityClick = onChangeCompletedTasksVisibilityClick,
             )
         },
@@ -116,10 +119,19 @@ private fun Screen(
 private fun TopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     showCompletedTasks: Boolean,
+    completedTasksCount: Int,
     onChangeCompletedTasksVisibilityClick: () -> Unit,
 ) {
     TopAppBar(
-        title = { Text(text = "Мои дела") },
+        title = {
+            Column {
+                Text(text = "Мои дела")
+                Text(
+                    text = "Выполнено: $completedTasksCount",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        },
         actions = {
             IconButton(onClick = onChangeCompletedTasksVisibilityClick) {
                 if (showCompletedTasks) {

@@ -37,6 +37,9 @@ class TodoListViewModel(
     private val _items: MutableStateFlow<List<TodoItem>?> = MutableStateFlow(null)
     val items = _items.asStateFlow()
 
+    private val _completedTasksCount = MutableStateFlow(0)
+    val completedTasksCount = _completedTasksCount.asStateFlow()
+
     init {
         listenToTaskList()
     }
@@ -59,6 +62,7 @@ class TodoListViewModel(
     ) { showCompletedTasks, list ->
         val itemsToShow = list.filter { showCompletedTasks || !it.done }
         _items.update { itemsToShow }
+        _completedTasksCount.update { list.count { it.done } }
         _screenState.update { if (itemsToShow.isNotEmpty()) VIEW else EMPTY }
     }.launchIn(viewModelScope)
 
