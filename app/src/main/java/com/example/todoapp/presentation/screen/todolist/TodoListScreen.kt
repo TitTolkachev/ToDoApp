@@ -1,5 +1,6 @@
 package com.example.todoapp.presentation.screen.todolist
 
+import android.content.res.Configuration
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -22,13 +23,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,12 +40,15 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.todoapp.R
+import com.example.todoapp.data.model.Importance
 import com.example.todoapp.data.model.TodoItem
 import com.example.todoapp.presentation.screen.todolist.components.TodoListItem
 import com.example.todoapp.presentation.screen.todolist.model.TodoListScreenState
 import com.example.todoapp.presentation.theme.AppTheme
+import java.util.Date
 
 @Composable
 fun TodoListScreen(
@@ -49,12 +56,20 @@ fun TodoListScreen(
     navigateToItemCreate: () -> Unit,
 ) {
     val viewModel: TodoListViewModel = viewModel(factory = TodoListViewModel.Factory)
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        viewModel.showSnackbar.collect { message ->
+            snackbarHostState.showSnackbar(message)
+        }
+    }
 
     Screen(
-        items = viewModel.items.collectAsState().value ?: emptyList(),
-        showCompletedTasks = viewModel.showCompletedTasks.collectAsState().value,
-        completedTasksCount = viewModel.completedTasksCount.collectAsState().value,
-        screenState = viewModel.screenState.collectAsState().value,
+        items = viewModel.items.collectAsStateWithLifecycle().value ?: emptyList(),
+        showCompletedTasks = viewModel.showCompletedTasks.collectAsStateWithLifecycle().value,
+        completedTasksCount = viewModel.completedTasksCount.collectAsStateWithLifecycle().value,
+        screenState = viewModel.screenState.collectAsStateWithLifecycle().value,
+        snackbarHostState = snackbarHostState,
 
         onItemClick = navigateToItem,
         onItemCheckBoxClick = { id, completed ->
@@ -72,6 +87,7 @@ private fun Screen(
     showCompletedTasks: Boolean = true,
     completedTasksCount: Int = 0,
     screenState: TodoListScreenState = TodoListScreenState.EMPTY,
+    snackbarHostState: SnackbarHostState = SnackbarHostState(),
 
     onItemClick: (String) -> Unit = {},
     onItemCheckBoxClick: (id: String, done: Boolean) -> Unit = { _, _ -> },
@@ -83,6 +99,7 @@ private fun Screen(
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             TopBar(
                 scrollBehavior = scrollBehavior,
@@ -218,10 +235,65 @@ private fun ScreenEmpty() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
+)
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
+)
 @Composable
 private fun Preview() {
     AppTheme {
         Screen()
+    }
+}
+
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
+)
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
+)
+@Composable
+private fun Preview1() {
+    AppTheme {
+        Screen(
+            showCompletedTasks = true,
+            completedTasksCount = 5,
+            screenState = TodoListScreenState.VIEW,
+            items = listOf(
+                TodoItem(
+                    id = "1",
+                    text = "Задача 1",
+                    importance = Importance.LOW,
+                    deadline = null,
+                    done = false,
+                    creationDate = Date(),
+                    updateDate = Date(),
+                ),
+                TodoItem(
+                    id = "2",
+                    text = "Задача 2",
+                    importance = Importance.MEDIUM,
+                    deadline = null,
+                    done = true,
+                    creationDate = Date(),
+                    updateDate = Date(),
+                ),
+                TodoItem(
+                    id = "3",
+                    text = "Задача 3",
+                    importance = Importance.HIGH,
+                    deadline = null,
+                    done = false,
+                    creationDate = Date(),
+                    updateDate = Date(),
+                ),
+            ),
+        )
     }
 }
