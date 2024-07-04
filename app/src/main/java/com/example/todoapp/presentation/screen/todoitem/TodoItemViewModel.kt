@@ -13,6 +13,8 @@ import com.example.todoapp.data.repository.TodoItemsRepository
 import com.example.todoapp.presentation.screen.todoitem.model.TodoItemScreenMode
 import com.example.todoapp.presentation.screen.todoitem.model.TodoItemScreenMode.CREATE
 import com.example.todoapp.presentation.screen.todoitem.model.TodoItemScreenMode.EDIT
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -29,6 +31,12 @@ class TodoItemViewModel(
     private val todoItemId: String? = savedStateHandle[TODO_ITEM_ID]
     val mode: TodoItemScreenMode = if (todoItemId == null) CREATE else EDIT
 
+    private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
+        viewModelScope.launch {
+            _showSnackbar.emit(exception.message ?: "Unknown error")
+        }
+    }
+
     private val _text = MutableStateFlow("")
     val text = _text.asStateFlow()
     private val _importance = MutableStateFlow(Importance.MEDIUM)
@@ -38,6 +46,9 @@ class TodoItemViewModel(
 
     private val _navigateBack = MutableSharedFlow<Boolean>()
     val navigateBack = _navigateBack.asSharedFlow()
+
+    private val _showSnackbar = MutableSharedFlow<String>()
+    val showSnackbar = _showSnackbar.asSharedFlow()
 
     private val formatter = SimpleDateFormat("d MMMM yyyy", java.util.Locale.getDefault())
 
@@ -58,7 +69,7 @@ class TodoItemViewModel(
         _deadline.update { date }
     }
 
-    fun saveItem() = viewModelScope.launch {
+    fun saveItem() = viewModelScope.launch(Dispatchers.Default + exceptionHandler) {
         val item = TodoItem(
             id = "",
             text = _text.value,
@@ -82,7 +93,7 @@ class TodoItemViewModel(
         _navigateBack.emit(true)
     }
 
-    fun deleteItem() = viewModelScope.launch {
+    fun deleteItem() = viewModelScope.launch(Dispatchers.Default + exceptionHandler) {
         todoItemId?.let {
             todoItemsRepository.deleteItem(todoItemId)
             _navigateBack.emit(true)
@@ -91,11 +102,14 @@ class TodoItemViewModel(
 
     private fun loadItemData() {
         if (mode == CREATE) return
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default + exceptionHandler) {
             val item = todoItemsRepository.getItem(todoItemId ?: return@launch) ?: return@launch
             _text.update { item.text }
             _importance.update { item.importance }
             _deadline.update { item.deadline?.let { formatter.format(it) } ?: "" }
+
+            // Можно раскомментировать и посмотреть снекбары
+            // throw Exception("Test exception")
         }
     }
 

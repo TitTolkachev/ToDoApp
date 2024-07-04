@@ -3,10 +3,12 @@ package com.example.todoapp.data.repository
 import com.example.todoapp.data.model.Importance
 import com.example.todoapp.data.model.Importance.MEDIUM
 import com.example.todoapp.data.model.TodoItem
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.withContext
 import java.util.Date
 import java.util.UUID
 
@@ -15,7 +17,7 @@ class TodoItemsRepository {
     private val _items = MutableStateFlow(getTestData())
     val items: Flow<List<TodoItem>> = _items
 
-    suspend fun createItem(item: TodoItem) {
+    suspend fun createItem(item: TodoItem) = withContext(Dispatchers.IO) {
         delay(100L)
         val newItem = item.copy(
             id = UUID.randomUUID().toString(),
@@ -27,12 +29,12 @@ class TodoItemsRepository {
         _items.update { list -> list.plus(newItem) }
     }
 
-    suspend fun getItem(itemId: String): TodoItem? {
+    suspend fun getItem(itemId: String): TodoItem? = withContext(Dispatchers.IO) {
         delay(100L)
-        return _items.value.find { it.id == itemId }
+        return@withContext _items.value.find { it.id == itemId }
     }
 
-    suspend fun updateItem(item: TodoItem) {
+    suspend fun updateItem(item: TodoItem) = withContext(Dispatchers.IO) {
         delay(100L)
         _items.update { list ->
             list.map {
@@ -47,7 +49,7 @@ class TodoItemsRepository {
         }
     }
 
-    suspend fun deleteItem(todoItemId: String) {
+    suspend fun deleteItem(todoItemId: String) = withContext(Dispatchers.IO) {
         delay(100L)
         _items.update { list -> list.filterNot { it.id == todoItemId } }
     }
