@@ -33,6 +33,7 @@ class TodoListViewModel(
         }
     }
 
+    /** Синхронизирован ли список. */
     val dataIsActual = todoItemsRepository.dataIsActual
 
     private val _screenState = MutableStateFlow(LOADING)
@@ -68,6 +69,10 @@ class TodoListViewModel(
     ) = viewModelScope.launch(Dispatchers.Default + exceptionHandler) {
         val item = _items.value?.firstOrNull { it.id == itemId } ?: return@launch
         todoItemsRepository.updateItem(item.copy(done = completed))
+    }
+
+    fun sync() = viewModelScope.launch(Dispatchers.Default + exceptionHandler) {
+        todoItemsRepository.sync()
     }
 
     private fun listenToTaskList() = combine(

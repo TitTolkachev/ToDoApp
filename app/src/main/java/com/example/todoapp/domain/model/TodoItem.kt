@@ -2,6 +2,9 @@ package com.example.todoapp.domain.model
 
 import java.util.Date
 
+/**
+ * Данные о задаче.
+ */
 data class TodoItem(
     val id: String,
     val text: String,

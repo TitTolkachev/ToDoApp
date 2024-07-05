@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 import java.util.Date
 import java.util.UUID
 import com.example.todoapp.data.local.entity.TodoItem as TodoItemEntity
@@ -43,6 +42,7 @@ class TodoItemsRepositoryImpl(
             try {
                 sync()
             } catch (_: Exception) {
+                _dataIsActual.update { false }
             }
         }
         .flowOn(Dispatchers.IO)
@@ -90,6 +90,12 @@ class TodoItemsRepositoryImpl(
 
     override suspend fun sync() {
         val revision = dataStore.revision.firstOrNull() ?: 0
+
+        if (revision == 0) {
+            loadData()
+            return
+        }
+
         val userId = dataStore.userId
 
         val todoItems = todoItemDao.getAll().firstOrNull()?.map {
@@ -111,10 +117,17 @@ class TodoItemsRepositoryImpl(
         val userId = dataStore.userId
         val itemDto = newItem.toDto(userId)
 
-        val response = todoItemApi.addTodoItem(revision, AddRequest(itemDto))
-        if (response.isSuccessful) {
-            val newRevision = response.body()!!.revision
-            dataStore.updateRevision(newRevision)
+        try {
+            val response = todoItemApi.addTodoItem(revision, AddRequest(itemDto))
+            if (response.isSuccessful) {
+                val newRevision = response.body()!!.revision
+                dataStore.updateRevision(newRevision)
+            } else {
+                _dataIsActual.update { false }
+            }
+        } catch (e: Exception) {
+            _dataIsActual.update { false }
+            throw e
         }
     }
 
@@ -123,20 +136,52 @@ class TodoItemsRepositoryImpl(
         val userId = dataStore.userId
         val itemDto = newItem.toDto(userId)
 
-        val response = todoItemApi.updateTodoItem(revision, itemDto.id, UpdateRequest(itemDto))
-        if (response.isSuccessful) {
-            val newRevision = response.body()!!.revision
-            dataStore.updateRevision(newRevision)
+        try {
+            val response = todoItemApi.updateTodoItem(revision, itemDto.id, UpdateRequest(itemDto))
+            if (response.isSuccessful) {
+                val newRevision = response.body()!!.revision
+                dataStore.updateRevision(newRevision)
+            } else {
+                _dataIsActual.update { false }
+            }
+        } catch (e: Exception) {
+            _dataIsActual.update { false }
+            throw e
         }
     }
 
     private suspend fun deleteItemRemote(itemId: String) {
         val revision = dataStore.revision.first()
 
-        val response = todoItemApi.deleteTodoItem(revision, itemId)
-        if (response.isSuccessful) {
-            val newRevision = response.body()!!.revision
-            dataStore.updateRevision(newRevision)
+        try {
+            val response = todoItemApi.deleteTodoItem(revision, itemId)
+            if (response.isSuccessful) {
+                val newRevision = response.body()!!.revision
+                dataStore.updateRevision(newRevision)
+            } else {
+                _dataIsActual.update { false }
+            }
+        } catch (e: Exception) {
+            _dataIsActual.update { false }
+            throw e
+        }
+    }
+
+    private suspend fun loadData() {
+        try {
+            val response = todoItemApi.getTodoList()
+            if (response.isSuccessful) {
+                val newRevision = response.body()!!.revision
+                dataStore.updateRevision(newRevision)
+                todoItemDao.replace(response.body()!!.list.map { it.toDomain() }
+                    .map { it.toEntity() })
+                _dataIsActual.update { true }
+            } else {
+                _dataIsActual.update { false }
+            }
+        } catch (e: Exception) {
+            _dataIsActual.update { false }
+            throw e
         }
     }
 }

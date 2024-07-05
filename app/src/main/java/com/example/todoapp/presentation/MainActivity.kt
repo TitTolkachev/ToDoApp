@@ -13,6 +13,9 @@ import com.example.todoapp.presentation.navigation.RootNavGraph
 import com.example.todoapp.presentation.navigation.Screen
 import com.example.todoapp.presentation.theme.AppTheme
 
+/**
+ * Главня [ComponentActivity] приложения.
+ */
 class MainActivity : ComponentActivity() {
 
     private val viewModel by viewModels<MainViewModel>(factoryProducer = { MainViewModel.Factory })

@@ -10,6 +10,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+/**
+ * Слушатель подключения к интернету.
+ * Выполняет синхронизацию данных, если появляется подключение к интернету.
+ */
 class InternetConnectionListener(
     private val context: Context,
     private val todoItemsRepository: TodoItemsRepository

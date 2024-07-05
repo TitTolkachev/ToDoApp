@@ -6,7 +6,9 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
 
-
+/**
+ * Обработка ошибок при запросах к серверу.
+ */
 class ErrorInterceptor() : Interceptor {
 
     private var retryCount = 0

@@ -7,6 +7,9 @@ import com.example.todoapp.domain.model.Importance
 import java.util.Date
 import com.example.todoapp.domain.model.TodoItem as TodoItemDomain
 
+/**
+ * Представляет сущность TodoItem в БД.
+ */
 @Entity(tableName = "todo_item")
 data class TodoItem(
     @PrimaryKey val id: String,

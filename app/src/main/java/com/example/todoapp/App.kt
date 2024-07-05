@@ -7,6 +7,9 @@ import com.example.todoapp.data.service.TodoListSyncWorker.Companion.startTodoLi
 import com.example.todoapp.di.AppContainer
 import com.example.todoapp.di.DefaultAppContainer
 
+/**
+ * Основное приложение.
+ */
 class App : Application() {
     lateinit var container: AppContainer
     override fun onCreate() {

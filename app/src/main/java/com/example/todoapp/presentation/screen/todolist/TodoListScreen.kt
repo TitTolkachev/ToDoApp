@@ -1,21 +1,26 @@
 package com.example.todoapp.presentation.screen.todolist
 
-import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -38,7 +43,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -71,7 +75,9 @@ fun TodoListScreen(
         completedTasksCount = viewModel.completedTasksCount.collectAsStateWithLifecycle().value,
         screenState = viewModel.screenState.collectAsStateWithLifecycle().value,
         snackbarHostState = snackbarHostState,
+        dataIsActual = viewModel.dataIsActual.collectAsStateWithLifecycle().value,
 
+        onSyncClick = { viewModel.sync() },
         onItemClick = navigateToItem,
         onItemCheckBoxClick = { id, completed ->
             viewModel.changeItemCompletionStatus(id, completed)
@@ -89,7 +95,9 @@ private fun Screen(
     completedTasksCount: Int = 0,
     screenState: TodoListScreenState = TodoListScreenState.EMPTY,
     snackbarHostState: SnackbarHostState = SnackbarHostState(),
+    dataIsActual: Boolean? = true,
 
+    onSyncClick: () -> Unit = {},
     onItemClick: (String) -> Unit = {},
     onItemCheckBoxClick: (id: String, done: Boolean) -> Unit = { _, _ -> },
     onFabClick: () -> Unit = {},
@@ -106,6 +114,8 @@ private fun Screen(
                 scrollBehavior = scrollBehavior,
                 showCompletedTasks = showCompletedTasks,
                 completedTasksCount = completedTasksCount,
+                dataIsActual = dataIsActual,
+                onSyncClick = onSyncClick,
                 onChangeCompletedTasksVisibilityClick = onChangeCompletedTasksVisibilityClick,
             )
         },
@@ -138,16 +148,40 @@ private fun TopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     showCompletedTasks: Boolean,
     completedTasksCount: Int,
+    dataIsActual: Boolean? = true,
+    onSyncClick: () -> Unit,
     onChangeCompletedTasksVisibilityClick: () -> Unit,
 ) {
     TopAppBar(
         title = {
-            Column {
-                Text(text = "Мои дела")
-                Text(
-                    text = "Выполнено: $completedTasksCount",
-                    style = MaterialTheme.typography.bodyMedium
-                )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column {
+                    Text(text = "Мои дела")
+                    Text(
+                        text = "Выполнено: $completedTasksCount",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+                AnimatedVisibility(
+                    visible = dataIsActual == false,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        IconButton(onClick = onSyncClick) {
+                            Icon(
+                                imageVector = Icons.Rounded.Refresh,
+                                contentDescription = "Обновить",
+                                tint = MaterialTheme.colorScheme.error
+                            )
+                        }
+                        Text(
+                            text = "Данные устарели",
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.labelSmall
+                        )
+                    }
+                }
             }
         },
         actions = {

@@ -9,6 +9,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
+/**
+ * Класс для работы с API.
+ */
 class Network(private val dataStore: PrefsDataStore) {
 
     private val json = Json {
