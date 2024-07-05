@@ -1,10 +1,13 @@
 package com.example.todoapp.presentation.screen.login
 
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -16,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.todoapp.presentation.theme.AppTheme
 import com.yandex.authsdk.YandexAuthLoginOptions
@@ -50,6 +54,7 @@ fun LoginScreen(
     }
 
     Screen(
+        snackbarHostState = snackbarHostState,
         onLoginClick = { launcher.launch(loginOptions) }
     )
 }
@@ -57,22 +62,40 @@ fun LoginScreen(
 @Composable
 private fun Screen(
     snackbarHostState: SnackbarHostState = SnackbarHostState(),
-
     onLoginClick: () -> Unit = {},
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(text = "Добро пожаловать в приложение TodoList!")
+            Spacer(modifier = Modifier.weight(1f))
 
-            Button(onClick = onLoginClick) {
+            Text(text = "ToDoApp", style = MaterialTheme.typography.displayMedium)
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = "Добро пожаловать!")
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Button(
+                modifier = Modifier,
+                onClick = onLoginClick
+            ) {
                 Text(text = "Войти")
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "Войдите через Яндекс.ID, чтобы продолжить",
+                style = MaterialTheme.typography.bodySmall
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }

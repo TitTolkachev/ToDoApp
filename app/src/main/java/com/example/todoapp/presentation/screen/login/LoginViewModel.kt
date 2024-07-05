@@ -25,7 +25,7 @@ class LoginViewModel(
     fun onLogin(result: YandexAuthResult) {
         when (result) {
             YandexAuthResult.Cancelled -> viewModelScope.launch {
-                _showError.emit("Ошибка авторизации")
+                _showError.emit("Вход не выполнен")
             }
 
             is YandexAuthResult.Failure -> viewModelScope.launch {

@@ -62,7 +62,7 @@ fun RootNavGraph(
         composable(route = Screen.Login.route) {
             LoginScreen(
                 navigateToTodoList = {
-                    navController.navigate(route = Screen.TodoItem.route) {
+                    navController.navigate(route = Screen.TodoList.route) {
                         popUpTo(Screen.Login.route) { inclusive = true }
                         launchSingleTop = true
                     }
