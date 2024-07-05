@@ -24,10 +24,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.todoapp.R
-import com.example.todoapp.data.model.Importance.HIGH
-import com.example.todoapp.data.model.Importance.LOW
-import com.example.todoapp.data.model.Importance.MEDIUM
-import com.example.todoapp.data.model.TodoItem
+import com.example.todoapp.presentation.model.Importance.HIGH
+import com.example.todoapp.presentation.model.Importance.LOW
+import com.example.todoapp.presentation.model.Importance.MEDIUM
+import com.example.todoapp.presentation.model.TodoItem
 import com.example.todoapp.presentation.common.noRippleClickable
 import com.example.todoapp.presentation.theme.AppTheme
 import java.text.SimpleDateFormat

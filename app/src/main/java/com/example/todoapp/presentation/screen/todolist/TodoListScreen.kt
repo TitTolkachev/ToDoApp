@@ -43,8 +43,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.todoapp.R
-import com.example.todoapp.data.model.Importance
-import com.example.todoapp.data.model.TodoItem
+import com.example.todoapp.presentation.model.Importance
+import com.example.todoapp.presentation.model.TodoItem
 import com.example.todoapp.presentation.screen.todolist.components.TodoListItem
 import com.example.todoapp.presentation.screen.todolist.model.TodoListScreenState
 import com.example.todoapp.presentation.theme.AppTheme

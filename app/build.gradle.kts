@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -13,6 +15,12 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
+        // Мой
+        manifestPlaceholders.put("YANDEX_CLIENT_ID", "7e6936cbf4094dd9b2385d66a3c98aaf")
+
+        // Не мой
+//        manifestPlaceholders.put("YANDEX_CLIENT_ID", "0d0970774e284fa8ba9ff70b6b06479a")
 
         vectorDrawables {
             useSupportLibrary = true
@@ -33,6 +41,9 @@ android {
         }
     }
     compileOptions {
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -43,7 +54,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.12"
     }
     packaging {
         resources {
@@ -65,4 +76,30 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // YandexAuth
+    implementation ("com.yandex.android:authsdk:3.1.0")
+
+    // SplashScreen
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
+
+    // Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
+    // Json Serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    // OkHttp
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.interceptor)
+
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
 }

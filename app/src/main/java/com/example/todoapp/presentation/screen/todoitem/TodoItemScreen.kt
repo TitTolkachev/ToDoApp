@@ -34,8 +34,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.todoapp.data.model.Importance
-import com.example.todoapp.data.model.Importance.HIGH
+import com.example.todoapp.presentation.model.Importance
+import com.example.todoapp.presentation.model.Importance.HIGH
 import com.example.todoapp.presentation.screen.todoitem.TodoItemViewModel.Companion.Factory
 import com.example.todoapp.presentation.screen.todoitem.components.DeadlineBlock
 import com.example.todoapp.presentation.screen.todoitem.components.DeadlineDatePicker

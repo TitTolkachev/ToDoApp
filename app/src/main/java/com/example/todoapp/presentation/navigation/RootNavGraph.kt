@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.todoapp.presentation.screen.login.LoginScreen
 import com.example.todoapp.presentation.screen.todoitem.TodoItemScreen
 import com.example.todoapp.presentation.screen.todolist.TodoListScreen
 
@@ -57,6 +58,9 @@ fun RootNavGraph(
                 todoItemId = todoItemId,
                 navigateBack = { navController.navigateUp() },
             )
+        }
+        composable(route = Screen.Login.route) {
+            LoginScreen()
         }
     }
 }

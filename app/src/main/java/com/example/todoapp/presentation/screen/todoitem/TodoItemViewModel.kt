@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.todoapp.App
-import com.example.todoapp.data.model.Importance
-import com.example.todoapp.data.model.TodoItem
+import com.example.todoapp.presentation.model.Importance
+import com.example.todoapp.presentation.model.TodoItem
 import com.example.todoapp.data.repository.TodoItemsRepository
 import com.example.todoapp.presentation.screen.todoitem.model.TodoItemScreenMode
 import com.example.todoapp.presentation.screen.todoitem.model.TodoItemScreenMode.CREATE

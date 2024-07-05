@@ -1,8 +1,9 @@
 package com.example.todoapp.data.repository
 
-import com.example.todoapp.data.model.Importance
-import com.example.todoapp.data.model.Importance.MEDIUM
-import com.example.todoapp.data.model.TodoItem
+import com.example.todoapp.data.remote.TodoListApi
+import com.example.todoapp.presentation.model.Importance
+import com.example.todoapp.presentation.model.Importance.MEDIUM
+import com.example.todoapp.presentation.model.TodoItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -12,10 +13,19 @@ import kotlinx.coroutines.withContext
 import java.util.Date
 import java.util.UUID
 
-class TodoItemsRepository {
+class TodoItemsRepository(private val todoListApi: TodoListApi) {
 
     private val _items = MutableStateFlow(getTestData())
     val items: Flow<List<TodoItem>> = _items
+
+    suspend fun getItems() = withContext(Dispatchers.IO) {
+
+        val response =  todoListApi.getTodoList()
+
+
+
+        return@withContext response?.body()?.list ?: emptyList()
+    }
 
     suspend fun createItem(item: TodoItem) = withContext(Dispatchers.IO) {
         delay(100L)
