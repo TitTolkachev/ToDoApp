@@ -1,7 +1,7 @@
 package com.example.todoapp.di
 
 import com.example.todoapp.data.local.PrefsDataStore
-import com.example.todoapp.data.remote.TodoListApi
+import com.example.todoapp.data.remote.TodoItemApi
 import com.example.todoapp.data.remote.TokenInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -37,7 +37,7 @@ class Network(private val dataStore: PrefsDataStore) {
             .build()
     }
 
-    val todoItemsApi: TodoListApi by lazy {
-        retrofit.create(TodoListApi::class.java)
+    val todoItemsApi: TodoItemApi by lazy {
+        retrofit.create(TodoItemApi::class.java)
     }
 }

@@ -1,6 +1,5 @@
 package com.example.todoapp.presentation.theme
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
@@ -18,18 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalLayoutApi::class)
-@Preview(
-    showBackground = true, device = "spec:width=1080px,height=2340px,dpi=320",
-    uiMode = Configuration.UI_MODE_NIGHT_YES
-)
-@Preview(
-    showBackground = true, device = "spec:width=1080px,height=2340px,dpi=320",
-    uiMode = Configuration.UI_MODE_NIGHT_NO
-)
+@PreviewLightDark
 @Composable
 private fun ColorThemeLightPreview() {
     AppTheme {

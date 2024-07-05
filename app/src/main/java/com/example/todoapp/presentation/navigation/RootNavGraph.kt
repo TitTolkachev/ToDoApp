@@ -60,7 +60,14 @@ fun RootNavGraph(
             )
         }
         composable(route = Screen.Login.route) {
-            LoginScreen()
+            LoginScreen(
+                navigateToTodoList = {
+                    navController.navigate(route = Screen.TodoItem.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                },
+            )
         }
     }
 }

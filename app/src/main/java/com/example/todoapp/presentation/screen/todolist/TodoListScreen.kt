@@ -39,12 +39,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.todoapp.R
-import com.example.todoapp.presentation.model.Importance
-import com.example.todoapp.presentation.model.TodoItem
+import com.example.todoapp.domain.model.Importance
+import com.example.todoapp.domain.model.TodoItem
 import com.example.todoapp.presentation.screen.todolist.components.TodoListItem
 import com.example.todoapp.presentation.screen.todolist.model.TodoListScreenState
 import com.example.todoapp.presentation.theme.AppTheme
@@ -235,14 +236,7 @@ private fun ScreenEmpty() {
     }
 }
 
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
-)
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
-)
+@PreviewLightDark
 @Composable
 private fun Preview() {
     AppTheme {
@@ -250,14 +244,7 @@ private fun Preview() {
     }
 }
 
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
-)
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
-)
+@PreviewLightDark
 @Composable
 private fun Preview1() {
     AppTheme {
@@ -272,8 +259,8 @@ private fun Preview1() {
                     importance = Importance.LOW,
                     deadline = null,
                     done = false,
-                    creationDate = Date(),
-                    updateDate = Date(),
+                    createdAt = Date(),
+                    changedAt = Date(),
                 ),
                 TodoItem(
                     id = "2",
@@ -281,8 +268,8 @@ private fun Preview1() {
                     importance = Importance.MEDIUM,
                     deadline = null,
                     done = true,
-                    creationDate = Date(),
-                    updateDate = Date(),
+                    createdAt = Date(),
+                    changedAt = Date(),
                 ),
                 TodoItem(
                     id = "3",
@@ -290,8 +277,8 @@ private fun Preview1() {
                     importance = Importance.HIGH,
                     deadline = null,
                     done = false,
-                    creationDate = Date(),
-                    updateDate = Date(),
+                    createdAt = Date(),
+                    changedAt = Date(),
                 ),
             ),
         )

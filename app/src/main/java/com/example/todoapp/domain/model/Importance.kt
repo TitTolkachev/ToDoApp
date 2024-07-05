@@ -1,4 +1,4 @@
-package com.example.todoapp.presentation.model
+package com.example.todoapp.domain.model
 
 enum class Importance {
     LOW,

@@ -13,7 +13,7 @@ class PrefsDataStore(private val context: Context) {
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "prefs")
 
-    suspend fun updateTokens(token: String? = null) {
+    suspend fun updateToken(token: String? = null) {
         context.dataStore.edit { prefs ->
             token?.let {
                 prefs[YANDEX_AUTH_TOKEN] = token

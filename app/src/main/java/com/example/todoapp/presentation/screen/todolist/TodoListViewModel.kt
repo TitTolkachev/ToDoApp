@@ -6,15 +6,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.todoapp.App
-import com.example.todoapp.presentation.model.TodoItem
-import com.example.todoapp.data.repository.TodoItemsRepository
-import com.example.todoapp.presentation.model.Importance
+import com.example.todoapp.domain.model.Importance
+import com.example.todoapp.domain.model.TodoItem
+import com.example.todoapp.domain.repository.TodoItemsRepository
 import com.example.todoapp.presentation.screen.todolist.model.TodoListScreenState.EMPTY
 import com.example.todoapp.presentation.screen.todolist.model.TodoListScreenState.LOADING
 import com.example.todoapp.presentation.screen.todolist.model.TodoListScreenState.VIEW
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -23,7 +22,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -45,23 +43,7 @@ class TodoListViewModel(
     val showCompletedTasks = _showCompletedTasks.asStateFlow()
 
     /** Все элементы. */
-    private val _allItems = flow {
-        emit(listOf<TodoItem>())
-
-        val items = todoItemsRepository.getItems()
-
-        emit(items.map {
-            TodoItem(
-                id = it.id,
-                text = it.text,
-                importance = Importance.LOW,
-                deadline = Date(),
-                done = it.done,
-                creationDate = Date(),
-                updateDate = null,
-            )
-        })
-    }
+    private val _allItems = todoItemsRepository.getItems()
 
     /** Элементы, показываемые на экране. */
     private val _items: MutableStateFlow<List<TodoItem>?> = MutableStateFlow(null)

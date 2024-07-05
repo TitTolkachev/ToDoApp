@@ -6,19 +6,15 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.todoapp.App
-import com.example.todoapp.data.repository.AuthRepository
+import com.example.todoapp.domain.repository.AuthRepository
 import com.example.todoapp.presentation.navigation.Screen
-import com.yandex.authsdk.YandexAuthSdk
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
-class MainViewModel(
-    private val yandexAuthSdk: YandexAuthSdk,
-    private val authRepository: AuthRepository
-) : ViewModel() {
+class MainViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         exception.printStackTrace()
@@ -47,9 +43,8 @@ class MainViewModel(
             initializer {
                 val application =
                     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as App)
-                val yandexAuthSdk = application.container.yandexAuthSdk
                 val authRepository = application.container.authRepository
-                MainViewModel(yandexAuthSdk, authRepository)
+                MainViewModel(authRepository)
             }
         }
     }
