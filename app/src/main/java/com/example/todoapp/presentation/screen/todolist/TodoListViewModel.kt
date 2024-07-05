@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.todoapp.App
-import com.example.todoapp.domain.model.Importance
 import com.example.todoapp.domain.model.TodoItem
 import com.example.todoapp.domain.repository.TodoItemsRepository
 import com.example.todoapp.presentation.screen.todolist.model.TodoListScreenState.EMPTY
@@ -19,12 +18,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.Date
 
 class TodoListViewModel(
     private val todoItemsRepository: TodoItemsRepository,
@@ -35,6 +32,8 @@ class TodoListViewModel(
             _showSnackbar.emit(exception.message ?: "Unknown error")
         }
     }
+
+    val dataIsActual = todoItemsRepository.dataIsActual
 
     private val _screenState = MutableStateFlow(LOADING)
     val screenState = _screenState.asStateFlow()

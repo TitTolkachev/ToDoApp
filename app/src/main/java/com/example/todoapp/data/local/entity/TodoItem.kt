@@ -31,4 +31,16 @@ data class TodoItem(
     )
 }
 
+fun TodoItemDomain.toEntity() = TodoItem(
+    id = id,
+    text = text,
+    importance = importance,
+    deadline = deadline?.time,
+    done = done,
+    color = null,
+    createdAt = createdAt.time,
+    changedAt = changedAt?.time,
+    lastUpdatedBy = "",
+)
+
 private fun Long?.toDate() = this?.let { Date(it) }

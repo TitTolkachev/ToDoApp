@@ -7,6 +7,9 @@ import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
 
+/**
+ * Подставляет токены в запросы, требующие авторизацию.
+ */
 class TokenInterceptor(
     private val dataStore: PrefsDataStore,
 ) : Interceptor {

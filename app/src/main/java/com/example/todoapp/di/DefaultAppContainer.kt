@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import com.example.todoapp.data.local.AppDatabase
 import com.example.todoapp.data.local.PrefsDataStore
+import com.example.todoapp.data.remote.Network
 import com.example.todoapp.data.repository.AuthRepositoryImpl
 import com.example.todoapp.data.repository.TodoItemsRepositoryImpl
+import com.example.todoapp.data.service.InternetConnectionListener
 import com.example.todoapp.domain.repository.AuthRepository
 import com.example.todoapp.domain.repository.TodoItemsRepository
 
@@ -30,11 +32,17 @@ class DefaultAppContainer(private val appContext: Context) : AppContainer {
     private val todoListApi = network.todoItemsApi
 
     // Repositories
-    private val _todoItemsRepository = TodoItemsRepositoryImpl(todoListApi, todoItemsDao)
+    private val _todoItemsRepository =
+        TodoItemsRepositoryImpl(prefsDataStore, todoListApi, todoItemsDao)
     override val todoItemsRepository: TodoItemsRepository
         get() = _todoItemsRepository
 
     private val _authRepository = AuthRepositoryImpl(prefsDataStore)
     override val authRepository: AuthRepository
         get() = _authRepository
+
+    // Listeners
+    private val _internetConnectionListener =
+        InternetConnectionListener(appContext, todoItemsRepository)
+    override val internetConnectionListener = _internetConnectionListener
 }

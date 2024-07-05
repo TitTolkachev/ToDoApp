@@ -1,8 +1,6 @@
-package com.example.todoapp.di
+package com.example.todoapp.data.remote
 
 import com.example.todoapp.data.local.PrefsDataStore
-import com.example.todoapp.data.remote.TodoItemApi
-import com.example.todoapp.data.remote.TokenInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -20,6 +18,7 @@ class Network(private val dataStore: PrefsDataStore) {
 
     private val retrofit by lazy {
         val tokenInterceptor = TokenInterceptor(dataStore)
+        val errorInterceptor = ErrorInterceptor()
 
         val httpClient = OkHttpClient.Builder()
             .connectTimeout(120, TimeUnit.SECONDS)
@@ -27,6 +26,7 @@ class Network(private val dataStore: PrefsDataStore) {
             .writeTimeout(120, TimeUnit.SECONDS)
             .callTimeout(120, TimeUnit.SECONDS)
             .addInterceptor(tokenInterceptor)
+            .addInterceptor(errorInterceptor)
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .build()
 

@@ -107,9 +107,6 @@ class TodoItemViewModel(
             _text.update { item.text }
             _importance.update { item.importance }
             _deadline.update { item.deadline?.let { formatter.format(it) } ?: "" }
-
-            // Можно раскомментировать и посмотреть снекбары
-            // throw Exception("Test exception")
         }
     }
 

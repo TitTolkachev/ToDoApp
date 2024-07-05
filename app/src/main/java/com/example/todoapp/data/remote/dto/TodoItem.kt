@@ -29,11 +29,29 @@ data class TodoItem(
     )
 }
 
+fun TodoItemDomain.toDto(userId: String) = TodoItem(
+    id = id,
+    text = text,
+    importance = importance.toDtoImportance(),
+    deadline = deadline?.time,
+    done = done,
+    color = color,
+    created_at = createdAt.time,
+    changed_at = changedAt?.time,
+    last_updated_by = userId,
+)
+
 private fun String.toDomainImportance() = when (this) {
     "low" -> Importance.LOW
     "basic" -> Importance.MEDIUM
     "important" -> Importance.HIGH
     else -> Importance.MEDIUM
+}
+
+private fun Importance.toDtoImportance() = when (this) {
+    Importance.LOW -> "low"
+    Importance.MEDIUM -> "basic"
+    Importance.HIGH -> "important"
 }
 
 private fun Long?.toDate() = this?.let { Date(it) }
