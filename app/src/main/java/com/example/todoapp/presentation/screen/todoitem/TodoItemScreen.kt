@@ -1,6 +1,5 @@
 package com.example.todoapp.presentation.screen.todoitem
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -30,12 +29,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.todoapp.data.model.Importance
-import com.example.todoapp.data.model.Importance.HIGH
+import com.example.todoapp.domain.model.Importance
+import com.example.todoapp.domain.model.Importance.HIGH
 import com.example.todoapp.presentation.screen.todoitem.TodoItemViewModel.Companion.Factory
 import com.example.todoapp.presentation.screen.todoitem.components.DeadlineBlock
 import com.example.todoapp.presentation.screen.todoitem.components.DeadlineDatePicker
@@ -155,14 +154,7 @@ private fun Screen(
     }
 }
 
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
-)
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
-)
+@PreviewLightDark
 @Composable
 private fun Preview1() {
     AppTheme {
@@ -170,14 +162,7 @@ private fun Preview1() {
     }
 }
 
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
-)
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
-)
+@PreviewLightDark
 @Composable
 private fun Preview2() {
     AppTheme {

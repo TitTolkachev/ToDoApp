@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.todoapp.App
-import com.example.todoapp.data.model.Importance
-import com.example.todoapp.data.model.TodoItem
-import com.example.todoapp.data.repository.TodoItemsRepository
+import com.example.todoapp.domain.model.Importance
+import com.example.todoapp.domain.model.TodoItem
+import com.example.todoapp.domain.repository.TodoItemsRepository
 import com.example.todoapp.presentation.screen.todoitem.model.TodoItemScreenMode
 import com.example.todoapp.presentation.screen.todoitem.model.TodoItemScreenMode.CREATE
 import com.example.todoapp.presentation.screen.todoitem.model.TodoItemScreenMode.EDIT
@@ -80,8 +80,8 @@ class TodoItemViewModel(
                 null
             },
             done = false,
-            creationDate = Date(),
-            updateDate = null,
+            createdAt = Date(),
+            changedAt = null,
         )
 
         if (mode == CREATE) {
@@ -107,9 +107,6 @@ class TodoItemViewModel(
             _text.update { item.text }
             _importance.update { item.importance }
             _deadline.update { item.deadline?.let { formatter.format(it) } ?: "" }
-
-            // Можно раскомментировать и посмотреть снекбары
-            // throw Exception("Test exception")
         }
     }
 

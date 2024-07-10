@@ -24,10 +24,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.todoapp.R
-import com.example.todoapp.data.model.Importance.HIGH
-import com.example.todoapp.data.model.Importance.LOW
-import com.example.todoapp.data.model.Importance.MEDIUM
-import com.example.todoapp.data.model.TodoItem
+import com.example.todoapp.domain.model.Importance.HIGH
+import com.example.todoapp.domain.model.Importance.LOW
+import com.example.todoapp.domain.model.Importance.MEDIUM
+import com.example.todoapp.domain.model.TodoItem
 import com.example.todoapp.presentation.common.noRippleClickable
 import com.example.todoapp.presentation.theme.AppTheme
 import java.text.SimpleDateFormat
@@ -152,8 +152,8 @@ private fun Preview() {
                         importance = MEDIUM,
                         deadline = Date(Date().time - 86400000),
                         done = false,
-                        creationDate = Date(Date().time + 86400000),
-                        updateDate = null
+                        createdAt = Date(Date().time + 86400000),
+                        changedAt = null
                     ),
                     onCheckedChange = {},
                 ) {}

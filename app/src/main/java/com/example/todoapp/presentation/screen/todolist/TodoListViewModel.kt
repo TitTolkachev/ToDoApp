@@ -6,14 +6,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.todoapp.App
-import com.example.todoapp.data.model.TodoItem
-import com.example.todoapp.data.repository.TodoItemsRepository
+import com.example.todoapp.domain.model.TodoItem
+import com.example.todoapp.domain.repository.TodoItemsRepository
 import com.example.todoapp.presentation.screen.todolist.model.TodoListScreenState.EMPTY
 import com.example.todoapp.presentation.screen.todolist.model.TodoListScreenState.LOADING
 import com.example.todoapp.presentation.screen.todolist.model.TodoListScreenState.VIEW
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -21,12 +20,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TodoListViewModel(
-    private val todoItemsRepository: TodoItemsRepository
+    private val todoItemsRepository: TodoItemsRepository,
 ) : ViewModel() {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
@@ -35,6 +33,9 @@ class TodoListViewModel(
         }
     }
 
+    /** Синхронизирован ли список. */
+    val dataIsActual = todoItemsRepository.dataIsActual
+
     private val _screenState = MutableStateFlow(LOADING)
     val screenState = _screenState.asStateFlow()
 
@@ -42,7 +43,7 @@ class TodoListViewModel(
     val showCompletedTasks = _showCompletedTasks.asStateFlow()
 
     /** Все элементы. */
-    private val _allItems = todoItemsRepository.items.onStart { delay(1000L) }
+    private val _allItems = todoItemsRepository.getItems()
 
     /** Элементы, показываемые на экране. */
     private val _items: MutableStateFlow<List<TodoItem>?> = MutableStateFlow(null)
@@ -68,6 +69,10 @@ class TodoListViewModel(
     ) = viewModelScope.launch(Dispatchers.Default + exceptionHandler) {
         val item = _items.value?.firstOrNull { it.id == itemId } ?: return@launch
         todoItemsRepository.updateItem(item.copy(done = completed))
+    }
+
+    fun sync() = viewModelScope.launch(Dispatchers.Default + exceptionHandler) {
+        todoItemsRepository.sync()
     }
 
     private fun listenToTaskList() = combine(
