@@ -31,11 +31,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.todoapp.domain.model.Importance
 import com.example.todoapp.domain.model.Importance.HIGH
-import com.example.todoapp.presentation.screen.todoitem.TodoItemViewModel.Companion.Factory
 import com.example.todoapp.presentation.screen.todoitem.components.DeadlineBlock
 import com.example.todoapp.presentation.screen.todoitem.components.DeadlineDatePicker
 import com.example.todoapp.presentation.screen.todoitem.components.ImportanceBlock
@@ -46,10 +45,9 @@ import com.example.todoapp.presentation.theme.AppTheme
 
 @Composable
 fun TodoItemScreen(
-    todoItemId: String? = null,
     navigateBack: () -> Unit,
 ) {
-    val viewModel: TodoItemViewModel = viewModel(factory = Factory(todoItemId))
+    val viewModel: TodoItemViewModel = hiltViewModel()
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {

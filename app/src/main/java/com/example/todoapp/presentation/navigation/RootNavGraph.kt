@@ -53,9 +53,7 @@ fun RootNavGraph(
                 }
             )
         ) {
-            val todoItemId = it.arguments?.getString("todoItemId")
             TodoItemScreen(
-                todoItemId = todoItemId,
                 navigateBack = { navController.navigateUp() },
             )
         }

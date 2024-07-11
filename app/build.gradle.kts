@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -79,7 +80,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // YandexAuth
-    implementation ("com.yandex.android:authsdk:3.1.0")
+    implementation("com.yandex.android:authsdk:3.1.0")
 
     // SplashScreen
     implementation("androidx.core:core-splashscreen:1.0.1")
@@ -103,4 +104,11 @@ dependencies {
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.work)
+    implementation(libs.hilt.navigation)
+    ksp(libs.hilt.compiler)
+    ksp(libs.hilt.androidCompiler)
 }

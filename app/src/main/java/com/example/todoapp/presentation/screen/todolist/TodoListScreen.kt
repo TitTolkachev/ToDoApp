@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,8 +44,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.todoapp.R
 import com.example.todoapp.domain.model.Importance
 import com.example.todoapp.domain.model.TodoItem
@@ -60,7 +59,7 @@ fun TodoListScreen(
     navigateToItem: (todoItemId: String) -> Unit,
     navigateToItemCreate: () -> Unit,
 ) {
-    val viewModel: TodoListViewModel = viewModel(factory = TodoListViewModel.Factory)
+    val viewModel: TodoListViewModel = hiltViewModel()
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {

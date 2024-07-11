@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.todoapp.presentation.theme.AppTheme
 import com.yandex.authsdk.YandexAuthLoginOptions
 import com.yandex.authsdk.YandexAuthOptions
@@ -30,7 +30,7 @@ import com.yandex.authsdk.YandexAuthSdk
 fun LoginScreen(
     navigateToTodoList: () -> Unit,
 ) {
-    val viewModel = viewModel<LoginViewModel>(factory = LoginViewModel.Factory)
+    val viewModel: LoginViewModel = hiltViewModel()
 
     val context = LocalContext.current
     val loginOptions = YandexAuthLoginOptions()

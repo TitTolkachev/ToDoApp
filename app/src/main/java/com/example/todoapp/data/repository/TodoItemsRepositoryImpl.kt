@@ -20,13 +20,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 import java.util.Date
 import java.util.UUID
+import javax.inject.Inject
 import com.example.todoapp.data.local.entity.TodoItem as TodoItemEntity
 import com.example.todoapp.data.remote.dto.AddTodoItemRequest as AddRequest
 import com.example.todoapp.data.remote.dto.UpdateTodoItemRequest as UpdateRequest
 import com.example.todoapp.data.remote.dto.UpdateTodoListRequest as UpdateListRequest
 
 /** Реализация [TodoItemsRepository]. */
-class TodoItemsRepositoryImpl(
+class TodoItemsRepositoryImpl @Inject constructor(
     private val dataStore: PrefsDataStore,
     private val todoItemApi: TodoItemApi,
     private val todoItemDao: TodoItemDao,
