@@ -20,6 +20,7 @@ hiltAndroid = "1.2.0"
 splashscreen = "1.0.1"
 yandexOAuth = "3.1.0"
 coroutines = "1.8.1"
+ktor = "2.3.7"
 
 [libraries]
 agp = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -56,6 +57,8 @@ hilt-androidCompiler = { group = "androidx.hilt", name = "hilt-compiler", versio
 hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltAndroid" }
 yandex-oauth = { group = "com.yandex.android", name = "authsdk", version.ref = "yandexOAuth" }
 kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+ktor-client = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
