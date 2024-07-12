@@ -1,4 +1,4 @@
-package com.example.todoapp.data.service
+package com.example.todoapp.sync
 
 import android.content.Context
 import android.net.ConnectivityManager

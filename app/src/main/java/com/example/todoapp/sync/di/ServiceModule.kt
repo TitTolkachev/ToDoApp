@@ -1,8 +1,8 @@
-package com.example.todoapp.di
+package com.example.todoapp.sync.di
 
 import android.content.Context
-import com.example.todoapp.data.service.InternetConnectionListener
 import com.example.todoapp.core.data.TodoItemsRepository
+import com.example.todoapp.sync.InternetConnectionListener
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class ServiceModule {
+object ServiceModule {
 
     @Provides
     @Singleton

@@ -3,8 +3,8 @@ package com.example.todoapp
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
-import com.example.todoapp.data.service.InternetConnectionListener
-import com.example.todoapp.data.service.TodoListSyncWorker.Companion.startTodoListSync
+import com.example.todoapp.sync.InternetConnectionListener
+import com.example.todoapp.sync.TodoListSyncWorker.Companion.startTodoListSync
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
