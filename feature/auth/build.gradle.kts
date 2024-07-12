@@ -4,9 +4,13 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
+android {
+    namespace = "com.example.todoapp.feature.auth"
+}
+
 dependencies {
-    implementation(projects.core.data)
-    implementation(projects.core.designsystem)
+    api(projects.core.data)
+    api(projects.core.designsystem)
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)

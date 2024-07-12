@@ -1,7 +1,6 @@
 import org.gradle.api.JavaVersion
 
 object AndroidConst {
-    const val NAMESPACE = "com.example.todoapp"
     const val COMPILE_SDK = 34
     const val TARGET_SDK = 34
     const val MIN_SDK = 26

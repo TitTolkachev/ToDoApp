@@ -1,7 +1,6 @@
 import com.android.build.gradle.BaseExtension
 
 fun BaseExtension.baseAndroidConfig() {
-    namespace = AndroidConst.NAMESPACE
     setCompileSdkVersion(AndroidConst.COMPILE_SDK)
     defaultConfig {
         targetSdk = AndroidConst.COMPILE_SDK

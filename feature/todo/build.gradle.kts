@@ -4,10 +4,14 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
+android {
+    namespace = "com.example.todoapp.feature.todo"
+}
+
 dependencies {
-    implementation(projects.core.data)
-    implementation(projects.core.model)
-    implementation(projects.core.designsystem)
+    api(projects.core.data)
+    api(projects.core.model)
+    api(projects.core.designsystem)
 
     // Hilt
     implementation(libs.hilt.android)

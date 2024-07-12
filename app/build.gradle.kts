@@ -5,6 +5,7 @@ plugins {
 }
 
 android {
+    namespace = "com.example.todoapp"
     defaultConfig {
         applicationId = "com.example.todoapp"
         versionCode = 1

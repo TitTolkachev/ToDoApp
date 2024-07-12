@@ -1,47 +1,18 @@
 plugins {
-    alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("android-core-lib-convention")
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
 }
 
 android {
     namespace = "com.example.todoapp.core.data"
-    compileSdk = 34
-
-    defaultConfig {
-        minSdk = 26
-
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        create("staging")
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
 }
 
 dependencies {
-    implementation(project(":core:model"))
-    implementation(project(":core:datastore"))
-    implementation(project(":core:network"))
-    implementation(project(":core:database"))
-
-    // Ktx
-    implementation(libs.androidx.core.ktx)
+    api(projects.core.model)
+    api(projects.core.datastore)
+    api(projects.core.network)
+    api(projects.core.database)
 
     // Hilt
     implementation(libs.hilt.android)

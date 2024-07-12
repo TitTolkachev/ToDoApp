@@ -10,5 +10,5 @@ android {
 }
 
 dependencies {
-    api(libs.retrofit)
+    api(libs.androidx.core.ktx)
 }
