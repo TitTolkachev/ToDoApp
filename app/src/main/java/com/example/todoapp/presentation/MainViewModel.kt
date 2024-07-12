@@ -2,7 +2,6 @@ package com.example.todoapp.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.todoapp.domain.repository.AuthRepository
 import com.example.todoapp.presentation.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -14,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: com.example.todoapp.core.data.AuthRepository
 ) : ViewModel() {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->

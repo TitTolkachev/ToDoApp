@@ -9,9 +9,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
+import com.example.todoapp.core.designsystem.theme.AppTheme
 import com.example.todoapp.presentation.navigation.RootNavGraph
 import com.example.todoapp.presentation.navigation.Screen
-import com.example.todoapp.presentation.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 /**

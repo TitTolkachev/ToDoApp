@@ -2,7 +2,7 @@ package com.example.todoapp.di
 
 import android.content.Context
 import com.example.todoapp.data.service.InternetConnectionListener
-import com.example.todoapp.domain.repository.TodoItemsRepository
+import com.example.todoapp.core.data.TodoItemsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
