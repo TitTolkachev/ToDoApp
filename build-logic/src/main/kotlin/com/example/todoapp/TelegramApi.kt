@@ -1,4 +1,4 @@
-package com.example.todoapp.practice
+package com.example.todoapp
 
 import io.ktor.client.HttpClient
 import io.ktor.client.request.forms.MultiPartFormDataContent
@@ -17,7 +17,6 @@ private const val BASE_URL = "https://api.telegram.org"
 class TelegramApi(
     private val httpClient: HttpClient,
 ) {
-
     suspend fun sendMessage(message: String, token: String, chatId: String): HttpResponse {
         return httpClient.post("$BASE_URL/bot$token/sendMessage") {
             parameter("chat_id", chatId)

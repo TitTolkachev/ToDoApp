@@ -4,8 +4,15 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
 }
-// Test 1
+
+apkSizeValidator {
+    enabled.set(true)
+    maxSizeInKb.set(100000)
+}
+
 telegramBuildReporter {
+//    token.set("")
+//    chatId.set("")
     token.set(providers.environmentVariable("TG_TOKEN"))
     chatId.set(providers.environmentVariable("TG_CHAT"))
 }
@@ -18,6 +25,16 @@ android {
         versionName = "1.0"
 
         manifestPlaceholders.put("YANDEX_CLIENT_ID", "7e6936cbf4094dd9b2385d66a3c98aaf")
+    }
+
+    afterEvaluate {
+        applicationVariants.all { variant ->
+            variant.outputs.all { output ->
+                val newApkName = "todolist-${variant.versionName}-${variant.versionCode}.apk"
+                val renamedApkFile = File(output.outputFile.parent, newApkName)
+                output.outputFile.renameTo(renamedApkFile)
+            }
+        }
     }
 }
 

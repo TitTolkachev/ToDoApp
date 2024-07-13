@@ -9,13 +9,9 @@ repositories {
 }
 
 gradlePlugin {
-    plugins.register("myPlugin") {
-        id = "my-plugin"
-        implementationClass = "com.example.todoapp.plugins.MyPlugin"
-    }
     plugins.register("telegram-reporter") {
         id = "telegram-reporter"
-        implementationClass = "com.example.todoapp.practice.TelegramReporterPlugin"
+        implementationClass = "com.example.todoapp.TelegramReporterPlugin"
     }
 }
 

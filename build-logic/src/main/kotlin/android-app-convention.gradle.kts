@@ -1,6 +1,4 @@
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
-import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.dependencies
 
 plugins {
     id("com.android.application")
