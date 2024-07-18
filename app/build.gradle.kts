@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
+// PR test 2
+
 apkSizeValidator {
     enabled.set(true)
     maxSizeInKb.set(100000)
