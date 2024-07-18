@@ -1,25 +1,36 @@
 package com.example.todoapp
 
 import android.app.Application
+import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
-import androidx.work.WorkManager
-import com.example.todoapp.data.service.TodoListSyncWorker.Companion.startTodoListSync
-import com.example.todoapp.di.AppContainer
-import com.example.todoapp.di.DefaultAppContainer
+import com.example.todoapp.sync.InternetConnectionListener
+import com.example.todoapp.sync.TodoListSyncWorker.Companion.startTodoListSync
+import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
 /**
  * Основное приложение.
  */
-class App : Application() {
-    lateinit var container: AppContainer
+@HiltAndroidApp
+class App : Application(), Configuration.Provider {
+
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
+    @Inject
+    lateinit var internetConnectionListener: InternetConnectionListener
+
+    override val workManagerConfiguration: Configuration by lazy {
+        Configuration.Builder().setWorkerFactory(workerFactory).build()
+    }
+
     override fun onCreate() {
         super.onCreate()
-        container = DefaultAppContainer(this)
 
         // Синхронизация списка задач
         applicationContext.startTodoListSync()
 
         // Отслеживание статуса интернет соединения
-        container.internetConnectionListener.startListener()
+        internetConnectionListener.startListener()
     }
 }
