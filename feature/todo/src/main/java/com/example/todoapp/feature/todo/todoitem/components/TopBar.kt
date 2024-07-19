@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -20,7 +21,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun TopBar(
+internal fun TopBar(
     saving: Boolean,
     onNavigateBackClick: () -> Unit,
     onSaveClick: () -> Unit
@@ -43,11 +44,15 @@ fun TopBar(
                 )
             }
             Spacer(Modifier.width(8.dp))
-            TextButton(onClick = onSaveClick) {
-                Text(
-                    text = "Сохранить".uppercase(),
-                    color = MaterialTheme.colorScheme.primary
+            TextButton(
+                enabled = !saving,
+                onClick = onSaveClick,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = MaterialTheme.colorScheme.primary,
+                    disabledContentColor = MaterialTheme.colorScheme.outline,
                 )
+            ) {
+                Text(text = "Сохранить".uppercase())
             }
         }
     )

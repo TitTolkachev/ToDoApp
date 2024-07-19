@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun DeadlineDatePicker(
+internal fun DeadlineDatePicker(
     datePickerVisible: Boolean,
     onDeadlineChange: (deadline: Long?) -> Unit,
     onDismissRequest: () -> Unit = {},

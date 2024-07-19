@@ -1,36 +1,26 @@
 package com.example.todoapp.feature.todo.todoitem
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
@@ -41,17 +31,23 @@ import com.example.todoapp.core.model.Importance
 import com.example.todoapp.core.model.Importance.HIGH
 import com.example.todoapp.feature.todo.todoitem.components.DeadlineBlock
 import com.example.todoapp.feature.todo.todoitem.components.DeadlineDatePicker
+import com.example.todoapp.feature.todo.todoitem.components.DeleteButton
 import com.example.todoapp.feature.todo.todoitem.components.ImportanceBlock
+import com.example.todoapp.feature.todo.todoitem.components.ImportanceBottomSheet
 import com.example.todoapp.feature.todo.todoitem.components.InputField
 import com.example.todoapp.feature.todo.todoitem.components.TopBar
 import com.example.todoapp.feature.todo.todoitem.model.TodoItemScreenMode.EDIT
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodoItemScreen(
     navigateBack: () -> Unit,
 ) {
     val viewModel: TodoItemViewModel = hiltViewModel()
     val snackbarHostState = remember { SnackbarHostState() }
+    var importanceBottomSheetVisible by remember { mutableStateOf(false) }
+    val importanceBottomSheetState = rememberModalBottomSheetState()
 
     LaunchedEffect(Unit) {
         viewModel.navigateBack.collect {
@@ -64,6 +60,21 @@ fun TodoItemScreen(
             snackbarHostState.showSnackbar(message)
         }
     }
+
+    val scope = rememberCoroutineScope()
+    ImportanceBottomSheet(
+        visible = importanceBottomSheetVisible,
+        sheetState = importanceBottomSheetState,
+        onDismissRequest = { importanceBottomSheetVisible = false },
+        onImportanceChange = { viewModel.onImportanceChange(it) },
+        onHide = {
+            scope.launch { importanceBottomSheetState.hide() }.invokeOnCompletion {
+                if (!importanceBottomSheetState.isVisible) {
+                    importanceBottomSheetVisible = false
+                }
+            }
+        },
+    )
 
     Screen(
         text = viewModel.text.collectAsStateWithLifecycle().value,
@@ -78,8 +89,8 @@ fun TodoItemScreen(
         onSaveClick = { viewModel.saveItem() },
         onDeleteClick = { viewModel.deleteItem() },
         onTextChange = { viewModel.onTextChange(it) },
-        onImportanceChange = { viewModel.onImportanceChange(it) },
         onDeadlineChange = { viewModel.onDeadlineChange(it) },
+        onImportanceBlockClick = { importanceBottomSheetVisible = true }
     )
 }
 
@@ -97,8 +108,8 @@ private fun Screen(
     onSaveClick: () -> Unit = {},
     onDeleteClick: () -> Unit = {},
     onTextChange: (text: String) -> Unit = {},
-    onImportanceChange: (importance: Importance) -> Unit = {},
     onDeadlineChange: (deadline: Long?) -> Unit = {},
+    onImportanceBlockClick: () -> Unit = {},
 ) {
     Scaffold(
         topBar = { TopBar(saving, onNavigateBackClick, onSaveClick) },
@@ -111,7 +122,6 @@ private fun Screen(
                 .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            var dropDownMenuVisible by remember { mutableStateOf(false) }
             var datePickerVisible by remember { mutableStateOf(false) }
 
             Spacer(Modifier.height(16.dp))
@@ -121,10 +131,9 @@ private fun Screen(
             Spacer(Modifier.height(16.dp))
 
             ImportanceBlock(
-                dropDownMenuVisible,
-                importance,
-                onImportanceChange,
-            ) { dropDownMenuVisible = it }
+                importance = importance,
+                onClick = onImportanceBlockClick,
+            )
 
             Spacer(Modifier.height(16.dp))
             HorizontalDivider()
@@ -139,27 +148,7 @@ private fun Screen(
             if (deleteEnabled()) {
                 Spacer(Modifier.height(16.dp))
                 HorizontalDivider()
-                Row(verticalAlignment = CenterVertically) {
-                    TextButton(
-                        onClick = onDeleteClick,
-                        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(24.dp),
-                            imageVector = Icons.Rounded.Delete,
-                            contentDescription = "Удалить TODO элемент"
-                        )
-                        Spacer(Modifier.width(12.dp))
-                        Text(text = "Удалить")
-                    }
-                    Spacer(Modifier.width(8.dp))
-                    AnimatedVisibility(visible = deleting) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
-                            strokeWidth = 3.dp
-                        )
-                    }
-                }
+                DeleteButton(deleting, onDeleteClick)
             }
 
             Spacer(Modifier.height(32.dp))

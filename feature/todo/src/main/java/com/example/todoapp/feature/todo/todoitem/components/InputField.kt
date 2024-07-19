@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.example.todoapp.core.designsystem.theme.AppTheme
 
 @Composable
-fun InputField(text: String, onTextChange: (text: String) -> Unit) {
+internal fun InputField(text: String, onTextChange: (text: String) -> Unit) {
     Card {
         TextField(
             value = text,

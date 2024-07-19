@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun DeadlineBlock(
+internal fun DeadlineBlock(
     deadline: String?,
     datePickerVisible: Boolean,
     onDeadlineChange: (deadline: Long?) -> Unit,
