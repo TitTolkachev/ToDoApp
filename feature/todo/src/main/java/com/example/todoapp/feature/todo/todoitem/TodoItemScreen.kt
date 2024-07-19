@@ -37,6 +37,7 @@ import com.example.todoapp.feature.todo.todoitem.components.ImportanceBottomShee
 import com.example.todoapp.feature.todo.todoitem.components.InputField
 import com.example.todoapp.feature.todo.todoitem.components.TopBar
 import com.example.todoapp.feature.todo.todoitem.model.TodoItemScreenMode.EDIT
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,12 +62,23 @@ fun TodoItemScreen(
         }
     }
 
+    var importanceBlockHighlighted by remember { mutableStateOf(false) }
+
     val scope = rememberCoroutineScope()
     ImportanceBottomSheet(
         visible = importanceBottomSheetVisible,
         sheetState = importanceBottomSheetState,
         onDismissRequest = { importanceBottomSheetVisible = false },
-        onImportanceChange = { viewModel.onImportanceChange(it) },
+        onImportanceChange = {
+            viewModel.onImportanceChange(it)
+            if (it == HIGH) {
+                scope.launch {
+                    importanceBlockHighlighted = true
+                    delay(400)
+                    importanceBlockHighlighted = false
+                }
+            }
+        },
         onHide = {
             scope.launch { importanceBottomSheetState.hide() }.invokeOnCompletion {
                 if (!importanceBottomSheetState.isVisible) {
@@ -83,6 +95,7 @@ fun TodoItemScreen(
         saving = viewModel.saving.collectAsStateWithLifecycle().value,
         deleting = viewModel.deleting.collectAsStateWithLifecycle().value,
         deleteEnabled = { viewModel.mode == EDIT },
+        importanceBlockHighlighted = importanceBlockHighlighted,
         snackbarHostState = snackbarHostState,
 
         onNavigateBackClick = navigateBack,
@@ -102,6 +115,7 @@ private fun Screen(
     saving: Boolean = false,
     deleting: Boolean = false,
     deleteEnabled: () -> Boolean = { false },
+    importanceBlockHighlighted: Boolean = false,
     snackbarHostState: SnackbarHostState = SnackbarHostState(),
 
     onNavigateBackClick: () -> Unit = {},
@@ -131,6 +145,7 @@ private fun Screen(
             Spacer(Modifier.height(16.dp))
 
             ImportanceBlock(
+                highlighted = importanceBlockHighlighted,
                 importance = importance,
                 onClick = onImportanceBlockClick,
             )
