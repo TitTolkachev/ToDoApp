@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.todoapp.core.model.AppTheme
 import kotlinx.coroutines.flow.map
 
 /**
@@ -31,6 +32,12 @@ class PrefsDataStore(private val context: Context) {
         }
     }
 
+    suspend fun updateTheme(theme: AppTheme) {
+        context.dataStore.edit { prefs ->
+            prefs[APP_THEME] = theme.name
+        }
+    }
+
     val tokenFlow = context.dataStore.data.map { prefs ->
         prefs[YANDEX_AUTH_TOKEN]
     }
@@ -39,10 +46,17 @@ class PrefsDataStore(private val context: Context) {
         prefs[LAST_KNOWN_REVISION] ?: 0
     }
 
+    val appTheme = context.dataStore.data.map { prefs ->
+        prefs[APP_THEME]?.let {
+            AppTheme.valueOf(it)
+        } ?: AppTheme.SYSTEM
+    }
+
     val userId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID)
 
     companion object {
         private val YANDEX_AUTH_TOKEN = stringPreferencesKey("access_token")
         private val LAST_KNOWN_REVISION = intPreferencesKey("last_known_revision")
+        private val APP_THEME = stringPreferencesKey("app_theme")
     }
 }

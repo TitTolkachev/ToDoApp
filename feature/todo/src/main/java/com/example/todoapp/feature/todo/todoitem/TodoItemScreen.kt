@@ -1,6 +1,8 @@
 package com.example.todoapp.feature.todo.todoitem
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
@@ -13,7 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
@@ -66,6 +69,8 @@ fun TodoItemScreen(
         text = viewModel.text.collectAsStateWithLifecycle().value,
         importance = viewModel.importance.collectAsStateWithLifecycle().value,
         deadline = viewModel.deadline.collectAsStateWithLifecycle().value,
+        saving = viewModel.saving.collectAsStateWithLifecycle().value,
+        deleting = viewModel.deleting.collectAsStateWithLifecycle().value,
         deleteEnabled = { viewModel.mode == EDIT },
         snackbarHostState = snackbarHostState,
 
@@ -78,12 +83,13 @@ fun TodoItemScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Screen(
     text: String = "",
     importance: Importance = HIGH,
     deadline: String? = null,
+    saving: Boolean = false,
+    deleting: Boolean = false,
     deleteEnabled: () -> Boolean = { false },
     snackbarHostState: SnackbarHostState = SnackbarHostState(),
 
@@ -95,7 +101,7 @@ private fun Screen(
     onDeadlineChange: (deadline: Long?) -> Unit = {},
 ) {
     Scaffold(
-        topBar = { TopBar(onNavigateBackClick, onSaveClick) },
+        topBar = { TopBar(saving, onNavigateBackClick, onSaveClick) },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         contentWindowInsets = WindowInsets.safeDrawing,
     ) { paddingValues ->
@@ -133,17 +139,26 @@ private fun Screen(
             if (deleteEnabled()) {
                 Spacer(Modifier.height(16.dp))
                 HorizontalDivider()
-                TextButton(
-                    onClick = onDeleteClick,
-                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
-                ) {
-                    Icon(
-                        modifier = Modifier.size(24.dp),
-                        imageVector = Icons.Rounded.Delete,
-                        contentDescription = "Удалить TODO элемент"
-                    )
-                    Spacer(Modifier.width(12.dp))
-                    Text(text = "Удалить")
+                Row(verticalAlignment = CenterVertically) {
+                    TextButton(
+                        onClick = onDeleteClick,
+                        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(24.dp),
+                            imageVector = Icons.Rounded.Delete,
+                            contentDescription = "Удалить TODO элемент"
+                        )
+                        Spacer(Modifier.width(12.dp))
+                        Text(text = "Удалить")
+                    }
+                    Spacer(Modifier.width(8.dp))
+                    AnimatedVisibility(visible = deleting) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            strokeWidth = 3.dp
+                        )
+                    }
                 }
             }
 

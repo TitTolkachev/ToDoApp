@@ -43,6 +43,7 @@ dependencies {
     implementation(projects.feature.todo)
     implementation(projects.feature.auth)
     implementation(projects.feature.about)
+    implementation(projects.feature.settings)
     implementation(projects.core.designsystem)
 
     implementation(libs.androidx.core.splashscreen)

@@ -23,7 +23,7 @@ fun AboutScreen(
     navigateBack: () -> Unit,
 ) {
     Surface(
-        modifier = Modifier.systemBarsPadding(),
+        modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
         Screen()
@@ -34,7 +34,9 @@ fun AboutScreen(
 private fun Screen() {
     val lifecycleOwner = LocalLifecycleOwner.current
     AndroidView(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .systemBarsPadding()
+            .fillMaxSize(),
         factory = { context ->
             with(context) {
                 val layoutInflater = context.getSystemService<LayoutInflater>()

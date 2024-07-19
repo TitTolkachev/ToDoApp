@@ -8,7 +8,7 @@ import java.io.IOException
 /**
  * Обработка ошибок при запросах к серверу.
  */
-class ErrorInterceptor() : Interceptor {
+class ErrorInterceptor : Interceptor {
 
     private var retryCount = 0
     private val maxRetries = 3

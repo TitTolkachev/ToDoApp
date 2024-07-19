@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.todoapp.feature.about.AboutScreen
 import com.example.todoapp.feature.auth.login.LoginScreen
+import com.example.todoapp.feature.settings.SettingsScreen
 import com.example.todoapp.feature.todo.todoitem.TodoItemScreen
 import com.example.todoapp.feature.todo.todolist.TodoListScreen
 
@@ -46,6 +47,11 @@ fun RootNavGraph(
                     navController.navigate(route = Screen.About.route) {
                         launchSingleTop = true
                     }
+                },
+                navigateToSettings = {
+                    navController.navigate(route = Screen.Settings.route) {
+                        launchSingleTop = true
+                    }
                 }
             )
         }
@@ -75,6 +81,11 @@ fun RootNavGraph(
         }
         composable(route = Screen.About.route) {
             AboutScreen(
+                navigateBack = { navController.navigateUp() },
+            )
+        }
+        composable(route = Screen.Settings.route) {
+            SettingsScreen(
                 navigateBack = { navController.navigateUp() },
             )
         }

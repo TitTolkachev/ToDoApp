@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title">Настройки</string>
+    <string name="select_theme">Выберите тему</string>
+    <string name="light_theme">Светлая</string>
+    <string name="dark_theme">Темная</string>
+    <string name="system_theme">Системная</string>
+
+    <!-- Content Description -->
+    <string name="close">Закрыть экран настроек</string>
+</resources>
