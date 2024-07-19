@@ -1,4 +1,4 @@
-package com.example.todoapp.presentation.screen.todolist
+package com.example.todoapp.feature.todo.todolist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

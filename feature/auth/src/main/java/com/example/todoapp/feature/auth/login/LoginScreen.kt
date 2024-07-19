@@ -1,4 +1,4 @@
-package com.example.todoapp.presentation.screen.login
+package com.example.todoapp.feature.auth.login
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Column
@@ -66,9 +66,10 @@ private fun Screen(
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
-    ) {
+    ) { contentPadding ->
         Column(
             modifier = Modifier
+                .padding(contentPadding)
                 .padding(16.dp)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
