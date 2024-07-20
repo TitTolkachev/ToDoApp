@@ -11,10 +11,10 @@ apkSizeValidator {
 }
 
 telegramBuildReporter {
-    token.set("")
-    chatId.set("")
-//    token.set(providers.environmentVariable("TG_TOKEN"))
-//    chatId.set(providers.environmentVariable("TG_CHAT"))
+//    token.set("")
+//    chatId.set("")
+    token.set(providers.environmentVariable("TG_TOKEN"))
+    chatId.set(providers.environmentVariable("TG_CHAT"))
 }
 
 android {

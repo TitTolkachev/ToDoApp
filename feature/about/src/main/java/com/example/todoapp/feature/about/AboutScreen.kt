@@ -19,19 +19,17 @@ import com.yandex.div.core.DivConfiguration
 import com.yandex.div.picasso.PicassoDivImageLoader
 
 @Composable
-fun AboutScreen(
-    navigateBack: () -> Unit,
-) {
+fun AboutScreen(navigateBack: () -> Unit) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        Screen()
+        Screen(navigateBack)
     }
 }
 
 @Composable
-private fun Screen() {
+private fun Screen(navigateBack: () -> Unit) {
     val lifecycleOwner = LocalLifecycleOwner.current
     AndroidView(
         modifier = Modifier
@@ -49,7 +47,7 @@ private fun Screen() {
 
                 val divContext = Div2Context(
                     baseContext = getActivity()!!,
-                    configuration = createDivConfiguration(),
+                    configuration = createDivConfiguration(navigateBack),
                     lifecycleOwner = lifecycleOwner,
                 )
 
@@ -68,8 +66,11 @@ private fun Context.getActivity(): ComponentActivity? = when (this) {
     else -> null
 }
 
-private fun Context.createDivConfiguration(): DivConfiguration {
+private fun Context.createDivConfiguration(navigateBack: () -> Unit): DivConfiguration {
     val imageLoader = PicassoDivImageLoader(this)
-    val configuration = DivConfiguration.Builder(imageLoader).build()
+    val configuration = DivConfiguration
+        .Builder(imageLoader)
+        .actionHandler(DivActionHandler(navigateBack))
+        .build()
     return configuration
 }
