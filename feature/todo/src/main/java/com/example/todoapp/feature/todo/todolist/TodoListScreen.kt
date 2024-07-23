@@ -1,4 +1,4 @@
-package com.example.todoapp.presentation.screen.todolist
+package com.example.todoapp.feature.todo.todolist
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -19,7 +19,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -61,6 +63,8 @@ import com.example.todoapp.core.designsystem.R as UiR
 fun TodoListScreen(
     navigateToItem: (todoItemId: String) -> Unit,
     navigateToItemCreate: () -> Unit,
+    navigateToAbout: () -> Unit,
+    navigateToSettings: () -> Unit,
 ) {
     val viewModel: TodoListViewModel = hiltViewModel()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -86,6 +90,8 @@ fun TodoListScreen(
         },
         onFabClick = navigateToItemCreate,
         onChangeCompletedTasksVisibilityClick = { viewModel.changeCompletedTasksVisibility() },
+        onInfoIconClick = navigateToAbout,
+        onSettingsIconClick = navigateToSettings,
     )
 }
 
@@ -104,6 +110,8 @@ private fun Screen(
     onItemCheckBoxClick: (id: String, done: Boolean) -> Unit = { _, _ -> },
     onFabClick: () -> Unit = {},
     onChangeCompletedTasksVisibilityClick: () -> Unit = {},
+    onInfoIconClick: () -> Unit = {},
+    onSettingsIconClick: () -> Unit = {},
 ) {
     val scrollBehavior =
         TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -119,6 +127,8 @@ private fun Screen(
                 dataIsActual = dataIsActual,
                 onSyncClick = onSyncClick,
                 onChangeCompletedTasksVisibilityClick = onChangeCompletedTasksVisibilityClick,
+                onInfoIconClick = onInfoIconClick,
+                onSettingsIconClick = onSettingsIconClick,
             )
         },
         floatingActionButton = {
@@ -153,6 +163,8 @@ private fun TopBar(
     dataIsActual: Boolean? = true,
     onSyncClick: () -> Unit,
     onChangeCompletedTasksVisibilityClick: () -> Unit,
+    onInfoIconClick: () -> Unit = {},
+    onSettingsIconClick: () -> Unit = {},
 ) {
     TopAppBar(
         title = {
@@ -187,6 +199,12 @@ private fun TopBar(
             }
         },
         actions = {
+            IconButton(onClick = onInfoIconClick) {
+                Icon(
+                    imageVector = Icons.Rounded.Info,
+                    contentDescription = "Информация о приложении"
+                )
+            }
             IconButton(onClick = onChangeCompletedTasksVisibilityClick) {
                 if (showCompletedTasks) {
                     Icon(
@@ -199,6 +217,12 @@ private fun TopBar(
                         contentDescription = "Показать выполненные задачи"
                     )
                 }
+            }
+            IconButton(onClick = onSettingsIconClick) {
+                Icon(
+                    imageVector = Icons.Rounded.Settings,
+                    contentDescription = "Настройки приложения"
+                )
             }
         },
         scrollBehavior = scrollBehavior

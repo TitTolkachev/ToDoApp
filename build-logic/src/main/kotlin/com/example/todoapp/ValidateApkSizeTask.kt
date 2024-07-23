@@ -38,10 +38,10 @@ abstract class ValidateApkSizeTask @Inject constructor(
     fun validate() {
 
         val apkFile = apkDir.get().asFile.listFiles()
-            ?.filter { it.name.endsWith(".apk") }
-            ?.firstOrNull() ?: throw GradleException("APK file not found")
+            ?.firstOrNull { it.name.endsWith(".apk") }
+            ?: throw GradleException("APK file not found")
 
-        val maxSizeInKb = maxSizeInKb.get() ?: 1024 * 128
+        val maxSizeInKb = maxSizeInKb.get() ?: (1024 * 128)
         val sizeInKb = apkFile.length() / 1024
 
         outputSizeInKbFile.get().asFile.writeText(sizeInKb.toString())

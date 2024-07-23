@@ -1,0 +1,272 @@
+{
+  "templates": {
+    "age_text": {
+      "type": "text",
+      "font_size": 16,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "alignment_horizontal": "center",
+      "text_color": "#000000",
+      "paddings": {
+        "top": 4,
+        "bottom": 4,
+        "left": 8,
+        "right": 8
+      },
+      "width": {
+        "type": "fixed",
+        "value": 80
+      },
+      "height": {
+        "type": "fixed",
+        "value": 50
+      },
+      "border": {
+        "corner_radius": 16
+      },
+      "actions": [
+        {
+          "$log_id": "clicked_on_number_log_id",
+          "$url": "clicked_on_number"
+        }
+      ]
+    },
+    "custom_image": {
+      "type": "container",
+      "items": [
+        {
+          "type": "state",
+          "$id": "image_id",
+          "width": {
+            "type": "match_parent"
+          },
+          "margins": {
+            "top": 16,
+            "left": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "states": [
+            {
+              "state_id": "1",
+              "div": {
+                "type": "image",
+                "image_url": "https://www.androidauthority.com/wp-content/uploads/2016/05/android-meme-03.jpg.webp",
+                "width": {
+                  "type": "fixed",
+                  "value": 250
+                },
+                "alignment_horizontal": "center",
+                "content_alignment_vertical": "top"
+              }
+            },
+            {
+              "state_id": "2",
+              "div": {
+                "type": "image",
+                "image_url": "https://cs14.pikabu.ru/post_img/2023/04/27/11/1682618822268938947.jpg",
+                "width": {
+                  "type": "fixed",
+                  "value": 300
+                },
+                "alignment_horizontal": "center",
+                "content_alignment_vertical": "top"
+              }
+            },
+            {
+              "state_id": "3",
+              "div": {
+                "type": "image",
+                "image_url": "https://dev.by/storage/images/31/30/82/36/derived/0628806c48ef793b7480ec9a53e8dcc1.jpg",
+                "width": {
+                  "type": "fixed",
+                  "value": 300
+                },
+                "alignment_horizontal": "center",
+                "content_alignment_vertical": "top"
+              }
+            },
+            {
+              "state_id": "4",
+              "div": {
+                "type": "image",
+                "image_url": "https://preview.redd.it/thbglcta6qu71.jpg?auto=webp&s=a722d6e5cef2b65423cf79a421a1bbd32c50b4dc",
+                "width": {
+                  "type": "fixed",
+                  "value": 300
+                },
+                "alignment_horizontal": "center",
+                "content_alignment_vertical": "top"
+              }
+            },
+            {
+              "state_id": "5",
+              "div": {
+                "type": "image",
+                "image_url": "https://avatars.dzeninfra.ru/get-zen_doc/59919/pub_5ad2489d5991d3e3d13c7479_5ad248c1bcf1bcc1f294891d/scale_1200",
+                "width": {
+                  "type": "fixed",
+                  "value": 250
+                },
+                "alignment_horizontal": "center",
+                "content_alignment_vertical": "top"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "divgram",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "height": {
+            "type": "match_parent"
+          },
+          "width": {
+            "type": "match_parent"
+          },
+          "items": [
+            {
+              "type": "image",
+              "image_url": "https://www.svgrepo.com/show/415928/close-mobile-ui.svg",
+              "tint_color": "#000000",
+              "width": {
+                "type": "fixed",
+                "value": 24
+              },
+              "height": {
+                "type": "fixed",
+                "value": 24
+              },
+              "margins": {
+                "left": 16,
+                "top": 16
+              },
+              "actions": [
+                {
+                  "log_id": "navigate_back",
+                  "url": "about-action://navigateBack?true"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "font_size": 20,
+              "text": "ToDoApp",
+              "text_alignment_horizontal": "center",
+              "text_alignment_vertical": "center",
+              "text_color": "#000000"
+            },
+            {
+              "type": "text",
+              "font_size": 16,
+              "text": "Приложение для ведения списка дел",
+              "text_alignment_horizontal": "center",
+              "text_alignment_vertical": "center",
+              "text_color": "#000000",
+              "paddings": {
+                "top": 4,
+                "bottom": 4,
+                "left": 8,
+                "right": 8
+              }
+            },
+            {
+              "type": "text",
+              "font_size": 12,
+              "text": "(А здесь можно листать мемы)",
+              "text_alignment_horizontal": "center",
+              "text_alignment_vertical": "center",
+              "text_color": "#000000"
+            },
+            {
+              "type": "gallery",
+              "height": {
+                "type": "fixed",
+                "value": 120
+              },
+              "paddings": {
+                "top": 16,
+                "left": 16,
+                "right": 16
+              },
+              "item_spacing": 16,
+              "items": [
+                {
+                  "type": "age_text",
+                  "text": "0+",
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#3cf843"
+                    }
+                  ],
+                  "clicked_on_number": "div-action://set_state?state_id=0/image_id/1",
+                  "clicked_on_number_log_id": "clicked_on_1"
+                },
+                {
+                  "type": "age_text",
+                  "text": "6+",
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#e6a500"
+                    }
+                  ],
+                  "clicked_on_number": "div-action://set_state?state_id=0/image_id/2",
+                  "clicked_on_number_log_id": "clicked_on_2"
+                },
+                {
+                  "type": "age_text",
+                  "text": "12+",
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#ffea00"
+                    }
+                  ],
+                  "clicked_on_number": "div-action://set_state?state_id=0/image_id/3",
+                  "clicked_on_number_log_id": "clicked_on_3"
+                },
+                {
+                  "type": "age_text",
+                  "text": "16+",
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#cf99f6"
+                    }
+                  ],
+                  "clicked_on_number": "div-action://set_state?state_id=0/image_id/4",
+                  "clicked_on_number_log_id": "clicked_on_4"
+                },
+                {
+                  "type": "age_text",
+                  "text": "18+",
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#44dee9"
+                    }
+                  ],
+                  "clicked_on_number": "div-action://set_state?state_id=0/image_id/5",
+                  "clicked_on_number_log_id": "clicked_on_5"
+                }
+              ]
+            },
+            {
+              "type": "custom_image",
+              "image_id": "image_id"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,4 +1,4 @@
-package com.example.todoapp.presentation.screen.login
+package com.example.todoapp.feature.auth.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

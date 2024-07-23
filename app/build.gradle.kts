@@ -5,8 +5,6 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
-// PR test 2
-
 apkSizeValidator {
     enabled.set(true)
     maxSizeInKb.set(100000)
@@ -26,7 +24,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        manifestPlaceholders.put("YANDEX_CLIENT_ID", "7e6936cbf4094dd9b2385d66a3c98aaf")
+        manifestPlaceholders["YANDEX_CLIENT_ID"] = "7e6936cbf4094dd9b2385d66a3c98aaf"
     }
 
     afterEvaluate {
@@ -44,6 +42,8 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.feature.todo)
     implementation(projects.feature.auth)
+    implementation(projects.feature.about)
+    implementation(projects.feature.settings)
     implementation(projects.core.designsystem)
 
     implementation(libs.androidx.core.splashscreen)

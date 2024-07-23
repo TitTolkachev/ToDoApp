@@ -4,8 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todoapp.core.model.Importance
+import com.example.todoapp.core.model.TodoItem
 import com.example.todoapp.feature.todo.todoitem.model.TodoItemScreenMode
-import com.example.todoapp.feature.todo.todoitem.model.TodoItemScreenMode.*
+import com.example.todoapp.feature.todo.todoitem.model.TodoItemScreenMode.CREATE
+import com.example.todoapp.feature.todo.todoitem.model.TodoItemScreenMode.EDIT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +31,8 @@ class TodoItemViewModel @Inject constructor(
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         viewModelScope.launch {
+            _saving.update { false }
+            _deleting.update { false }
             _showSnackbar.emit(exception.message ?: "Unknown error")
         }
     }
@@ -39,6 +43,10 @@ class TodoItemViewModel @Inject constructor(
     val importance = _importance.asStateFlow()
     private val _deadline = MutableStateFlow("")
     val deadline = _deadline.asStateFlow()
+    private val _saving = MutableStateFlow(false)
+    val saving = _saving.asStateFlow()
+    private val _deleting = MutableStateFlow(false)
+    val deleting = _deleting.asStateFlow()
 
     private val _navigateBack = MutableSharedFlow<Boolean>()
     val navigateBack = _navigateBack.asSharedFlow()
@@ -66,7 +74,11 @@ class TodoItemViewModel @Inject constructor(
     }
 
     fun saveItem() = viewModelScope.launch(Dispatchers.Default + exceptionHandler) {
-        val item = com.example.todoapp.core.model.TodoItem(
+        if (_saving.value) return@launch
+
+        _saving.update { true }
+
+        val item = TodoItem(
             id = "",
             text = _text.value,
             importance = _importance.value,
@@ -86,12 +98,16 @@ class TodoItemViewModel @Inject constructor(
             todoItemsRepository.updateItem(item.copy(id = todoItemId ?: return@launch))
         }
 
+        _saving.update { false }
         _navigateBack.emit(true)
     }
 
     fun deleteItem() = viewModelScope.launch(Dispatchers.Default + exceptionHandler) {
+        if (_deleting.value) return@launch
         todoItemId?.let {
+            _deleting.update { true }
             todoItemsRepository.deleteItem(todoItemId)
+            _deleting.update { false }
             _navigateBack.emit(true)
         }
     }
