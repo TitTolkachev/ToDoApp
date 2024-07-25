@@ -19,6 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -75,13 +77,17 @@ private fun Screen(
             modifier = Modifier
                 .padding(contentPadding)
                 .padding(16.dp)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .semantics { isTraversalGroup = true },
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                modifier = Modifier.semantics { traversalIndex = 1f },
+                modifier = Modifier.semantics {
+                    heading()
+                    traversalIndex = 1f
+                },
                 text = stringResource(R.string.title),
                 style = MaterialTheme.typography.displayMedium
             )
@@ -94,13 +100,10 @@ private fun Screen(
             Spacer(modifier = Modifier.weight(1f))
 
             Button(
-                modifier = Modifier,
+                modifier = Modifier.semantics { traversalIndex = 4f },
                 onClick = onLoginClick
             ) {
-                Text(
-                    modifier = Modifier.semantics { traversalIndex = 4f },
-                    text = stringResource(R.string.enter)
-                )
+                Text(text = stringResource(R.string.enter))
             }
 
             Spacer(modifier = Modifier.height(16.dp))
