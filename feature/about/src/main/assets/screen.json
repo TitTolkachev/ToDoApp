@@ -52,6 +52,7 @@
               "div": {
                 "type": "image",
                 "image_url": "https://www.androidauthority.com/wp-content/uploads/2016/05/android-meme-03.jpg.webp",
+                "placeholder_color": "#00000000",
                 "width": {
                   "type": "fixed",
                   "value": 250
@@ -65,6 +66,7 @@
               "div": {
                 "type": "image",
                 "image_url": "https://cs14.pikabu.ru/post_img/2023/04/27/11/1682618822268938947.jpg",
+                "placeholder_color": "#00000000",
                 "width": {
                   "type": "fixed",
                   "value": 300
@@ -78,6 +80,7 @@
               "div": {
                 "type": "image",
                 "image_url": "https://dev.by/storage/images/31/30/82/36/derived/0628806c48ef793b7480ec9a53e8dcc1.jpg",
+                "placeholder_color": "#00000000",
                 "width": {
                   "type": "fixed",
                   "value": 300
@@ -91,6 +94,7 @@
               "div": {
                 "type": "image",
                 "image_url": "https://preview.redd.it/thbglcta6qu71.jpg?auto=webp&s=a722d6e5cef2b65423cf79a421a1bbd32c50b4dc",
+                "placeholder_color": "#00000000",
                 "width": {
                   "type": "fixed",
                   "value": 300
@@ -104,6 +108,7 @@
               "div": {
                 "type": "image",
                 "image_url": "https://avatars.dzeninfra.ru/get-zen_doc/59919/pub_5ad2489d5991d3e3d13c7479_5ad248c1bcf1bcc1f294891d/scale_1200",
+                "placeholder_color": "#00000000",
                 "width": {
                   "type": "fixed",
                   "value": 250
@@ -135,7 +140,8 @@
             {
               "type": "image",
               "image_url": "https://www.svgrepo.com/show/415928/close-mobile-ui.svg",
-              "tint_color": "#000000",
+              "tint_color": "#919191",
+              "placeholder_color": "#00000000",
               "width": {
                 "type": "fixed",
                 "value": 24
@@ -161,7 +167,7 @@
               "text": "ToDoApp",
               "text_alignment_horizontal": "center",
               "text_alignment_vertical": "center",
-              "text_color": "#000000"
+              "text_color": "#919191"
             },
             {
               "type": "text",
@@ -169,7 +175,7 @@
               "text": "Приложение для ведения списка дел",
               "text_alignment_horizontal": "center",
               "text_alignment_vertical": "center",
-              "text_color": "#000000",
+              "text_color": "#919191",
               "paddings": {
                 "top": 4,
                 "bottom": 4,
@@ -183,7 +189,7 @@
               "text": "(А здесь можно листать мемы)",
               "text_alignment_horizontal": "center",
               "text_alignment_vertical": "center",
-              "text_color": "#000000"
+              "text_color": "#919191"
             },
             {
               "type": "gallery",
