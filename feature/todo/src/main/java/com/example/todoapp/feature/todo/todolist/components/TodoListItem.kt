@@ -19,6 +19,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.selectableGroup
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -43,11 +49,27 @@ fun TodoListItem(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .padding(top = 12.dp, end = 12.dp, bottom = 12.dp, start = 4.dp)
+            .semantics(mergeDescendants = true) {
+                selectableGroup()
+                selected = item.done
+                customActions = listOf(
+                    CustomAccessibilityAction("Отметить выполненным") {
+                        onCheckedChange(!item.done)
+                        true
+                    },
+                    CustomAccessibilityAction("Открыть") {
+                        onClick()
+                        true
+                    }
+                )
+            }
     ) {
         Checkbox(
             checked = item.done,
             onCheckedChange = onCheckedChange,
-            modifier = Modifier.offset(y = (-12).dp),
+            modifier = Modifier
+                .offset(y = (-12).dp)
+                .clearAndSetSemantics { },
         )
 
         Spacer(Modifier.width(4.dp))
@@ -76,7 +98,9 @@ fun TodoListItem(
         Column(
             Modifier
                 .fillMaxWidth()
+                .clearAndSetSemantics { }
                 .noRippleClickable(onClick = onClick)
+                .clearAndSetSemantics { }
         ) {
             if (item.done) {
                 CrossedText(text = item.text)
@@ -101,6 +125,7 @@ private fun BasicText(
     text: String,
 ) {
     Text(
+        modifier = Modifier.clearAndSetSemantics { },
         text = text,
         color = MaterialTheme.colorScheme.onSurface,
         style = MaterialTheme.typography.bodyLarge,
@@ -114,6 +139,7 @@ private fun CrossedText(
     text: String,
 ) {
     Text(
+        modifier = Modifier.clearAndSetSemantics { },
         text = text,
         color = MaterialTheme.colorScheme.outline,
         style = MaterialTheme.typography.bodyLarge.copy(
@@ -130,6 +156,7 @@ private fun Deadline(date: Date) {
         SimpleDateFormat("d MMMM yyyy", Locale.getDefault())
     }
     Text(
+        modifier = Modifier.clearAndSetSemantics { },
         text = formatter.format(date),
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         style = MaterialTheme.typography.bodySmall,

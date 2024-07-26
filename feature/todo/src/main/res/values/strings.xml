@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="todo_list_top_bar_title">Мои дела</string>
+    <string name="todo_list_top_bar_done">Выполнено: %1$d</string>
+    <string name="todo_list_top_bar_old_data">Данные устарели</string>
+
+
+    <!-- Descriptions -->
+    <string name="todo_list_top_bar_done_description">%1$d выполненных дел в списке. </string>
+    <string name="todo_list_top_bar_refresh_description">Обновить список дел</string>
+    <string name="todo_list_top_bar_old_data_description">Данные устарели</string>
+    <string name="todo_list_top_bar_app_info_description">Информация о приложении</string>
+    <string name="todo_list_top_bar_show_completed_description">Показывать выполненные задачи</string>
+    <string name="todo_list_top_bar_settings_description">Настройки приложения</string>
+</resources>
