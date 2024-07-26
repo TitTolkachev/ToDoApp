@@ -14,6 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.example.todoapp.core.designsystem.common.noRippleClickable
@@ -22,6 +26,7 @@ import com.example.todoapp.core.model.Importance
 import com.example.todoapp.core.model.Importance.HIGH
 import com.example.todoapp.core.model.Importance.LOW
 import com.example.todoapp.core.model.Importance.MEDIUM
+import com.example.todoapp.feature.todo.R
 
 @Composable
 internal fun ImportanceBlock(
@@ -29,6 +34,7 @@ internal fun ImportanceBlock(
     importance: Importance,
     onClick: () -> Unit
 ) {
+    val resources = LocalContext.current.resources
     val color = animateColorAsState(
         targetValue = if (highlighted) MaterialTheme.colorScheme.error else Color.Unspecified,
         label = "Importance Block Color"
@@ -49,17 +55,32 @@ internal fun ImportanceBlock(
         Column(
             Modifier
                 .fillMaxWidth()
-                .noRippleClickable { onClick() }
+                .noRippleClickable(
+                    onClick = onClick,
+                    onClickLabel = stringResource(R.string.todo_item_change_importance_description)
+                )
         ) {
             Text(
-                text = "Важность",
+                modifier = Modifier.semantics {
+                    contentDescription = resources.getString(
+                        R.string.todo_item_importance_description
+                    )
+                },
+                text = stringResource(R.string.todo_item_importance),
                 style = MaterialTheme.typography.bodyLarge,
             )
             Text(
+                modifier = Modifier.semantics {
+                    contentDescription = when (importance) {
+                        LOW -> resources.getString(R.string.todo_item_importance_low_description)
+                        MEDIUM -> resources.getString(R.string.todo_item_importance_medium_description)
+                        HIGH -> resources.getString(R.string.todo_item_importance_high_description)
+                    }
+                },
                 text = when (importance) {
-                    LOW -> "Низкий"
-                    MEDIUM -> "Нет"
-                    HIGH -> "Высокий"
+                    LOW -> stringResource(R.string.todo_item_importance_low)
+                    MEDIUM -> stringResource(R.string.todo_item_importance_medium)
+                    HIGH -> stringResource(R.string.todo_item_importance_high)
                 },
                 style = MaterialTheme.typography.labelMedium,
             )

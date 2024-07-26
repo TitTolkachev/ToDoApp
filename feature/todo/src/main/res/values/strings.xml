@@ -23,10 +23,23 @@
 
     <!-- Item -->
     <string name="todo_item_top_bar_save">Сохранить</string>
+    <string name="todo_item_importance">Важность</string>
+    <string name="todo_item_importance_low">Низкий</string>
+    <string name="todo_item_importance_medium">Нет</string>
+    <string name="todo_item_importance_high">Высокий</string>
     <string name="todo_item_deadline">Сделать до</string>
 
     <!-- Descriptions -->
     <string name="todo_item_top_bar_back">Закрыть экран задачи</string>
+    <string name="todo_item_importance_description">Важность задачи: </string>
+    <string name="todo_item_importance_low_description">Низкая</string>
+    <string name="todo_item_importance_medium_description">Обычная</string>
+    <string name="todo_item_importance_high_description">Высокая</string>
+    <string name="todo_item_importance_bs_low_description">Низкая важность задачи</string>
+    <string name="todo_item_importance_bs_medium_description">Обычная важность задачи</string>
+    <string name="todo_item_importance_bs_high_description">Высокая важность задачи</string>
+    <string name="todo_item_change_importance_description">Изменить</string>
+    <string name="todo_item_apply_importance_description">Применить</string>
     <string name="todo_item_deadline_description">Deadline</string>
     <string name="todo_item_select_deadline_description">Выбрать дату</string>
     <string name="todo_item_cancel_deadline_description">Убрать Deadline</string>
