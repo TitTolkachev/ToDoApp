@@ -33,6 +33,9 @@
     },
     "custom_image": {
       "type": "container",
+      "accessibility": {
+        "mode": "exclude"
+      },
       "items": [
         {
           "type": "state",
@@ -142,6 +145,10 @@
               "image_url": "https://www.svgrepo.com/show/415928/close-mobile-ui.svg",
               "tint_color": "#919191",
               "placeholder_color": "#00000000",
+              "accessibility": {
+                "description": "Закрыть экран информации о приложении",
+                "type": "button"
+              },
               "width": {
                 "type": "fixed",
                 "value": 24
@@ -213,6 +220,10 @@
                       "color": "#3cf843"
                     }
                   ],
+                  "accessibility": {
+                    "description": "Цена за кофе - 4 бакса, цена за айкофе - 12 баксов. Don't be an iDiot.",
+                    "type": "text"
+                  },
                   "clicked_on_number": "div-action://set_state?state_id=0/image_id/1",
                   "clicked_on_number_log_id": "clicked_on_1"
                 },
@@ -225,6 +236,10 @@
                       "color": "#e6a500"
                     }
                   ],
+                  "accessibility": {
+                    "description": "Android: Файл успешно сохранен. Я: куда он сохранен? Android: хрен его знает.",
+                    "type": "text"
+                  },
                   "clicked_on_number": "div-action://set_state?state_id=0/image_id/2",
                   "clicked_on_number_log_id": "clicked_on_2"
                 },
@@ -237,6 +252,10 @@
                       "color": "#ffea00"
                     }
                   ],
+                  "accessibility": {
+                    "description": "HR в столице: Опыт? Образование? Курсы? Навыки? Суперспособности? HR в регионах: судимы?",
+                    "type": "text"
+                  },
                   "clicked_on_number": "div-action://set_state?state_id=0/image_id/3",
                   "clicked_on_number_log_id": "clicked_on_3"
                 },
@@ -249,6 +268,10 @@
                       "color": "#cf99f6"
                     }
                   ],
+                  "accessibility": {
+                    "description": "Ненавижу себя. Cи плюс плюс. Вау! Я ненавижу тебя больше.",
+                    "type": "text"
+                  },
                   "clicked_on_number": "div-action://set_state?state_id=0/image_id/4",
                   "clicked_on_number_log_id": "clicked_on_4"
                 },
@@ -261,6 +284,10 @@
                       "color": "#44dee9"
                     }
                   ],
+                  "accessibility": {
+                    "description": "Почтальон Печкин: Вам посылка с XIAOMI пришла, но я вам ее не отдам. Потому, что у вас свой дом есть. А тем, у кого дом есть - не положено.",
+                    "type": "text"
+                  },
                   "clicked_on_number": "div-action://set_state?state_id=0/image_id/5",
                   "clicked_on_number_log_id": "clicked_on_5"
                 }
