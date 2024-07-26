@@ -73,6 +73,7 @@ fun TodoListScreen(
         dataIsActual = viewModel.dataIsActual.collectAsStateWithLifecycle().value,
 
         onSyncClick = { viewModel.sync() },
+        onDeleteItem = { viewModel.deleteItem(it) },
         onItemClick = navigateToItem,
         onItemCheckBoxClick = { id, completed ->
             viewModel.changeItemCompletionStatus(id, completed)
@@ -95,6 +96,7 @@ private fun Screen(
     dataIsActual: Boolean? = true,
 
     onSyncClick: () -> Unit = {},
+    onDeleteItem: (id: String) -> Unit = {},
     onItemClick: (String) -> Unit = {},
     onItemCheckBoxClick: (id: String, done: Boolean) -> Unit = { _, _ -> },
     onFabClick: () -> Unit = {},
@@ -135,7 +137,7 @@ private fun Screen(
         ) {
             when (it) {
                 LOADING -> ScreenLoading()
-                VIEW -> ScreenView(items, onItemCheckBoxClick, onItemClick)
+                VIEW -> ScreenView(items, onItemCheckBoxClick, onItemClick, onDeleteItem)
                 EMPTY -> ScreenEmpty()
             }
         }
@@ -153,7 +155,8 @@ private fun ScreenLoading() {
 private fun ScreenView(
     items: List<TodoItem>,
     onItemCheckBoxClick: (id: String, done: Boolean) -> Unit,
-    onItemClick: (String) -> Unit
+    onItemClick: (String) -> Unit,
+    onDeleteItem: (id: String) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -175,6 +178,7 @@ private fun ScreenView(
                 item = item,
                 onClick = { onItemClick(item.id) },
                 onCheckedChange = { done -> onItemCheckBoxClick(item.id, done) },
+                onDeleteItem = { onDeleteItem(item.id) },
             )
         }
         if (items.isNotEmpty()) {

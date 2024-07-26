@@ -49,6 +49,7 @@ fun TodoListItem(
     item: TodoItem,
     onCheckedChange: (Boolean) -> Unit,
     onClick: () -> Unit,
+    onDeleteItem: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -57,7 +58,8 @@ fun TodoListItem(
             .accessibilityDescription(
                 item = item,
                 onClick = onClick,
-                onCheckedChange = onCheckedChange
+                onDeleteItem = onDeleteItem,
+                onCheckedChange = onCheckedChange,
             )
     ) {
         Checkbox(
@@ -166,6 +168,7 @@ private fun Deadline(date: Date) {
 private fun Modifier.accessibilityDescription(
     item: TodoItem,
     onClick: () -> Unit,
+    onDeleteItem: () -> Unit,
     onCheckedChange: (Boolean) -> Unit,
 ): Modifier {
     val resources = LocalContext.current.resources
@@ -191,6 +194,10 @@ private fun Modifier.accessibilityDescription(
             },
             CustomAccessibilityAction(resources.getString(R.string.todo_list_show_item)) {
                 onClick()
+                true
+            },
+            CustomAccessibilityAction(resources.getString(R.string.todo_list_delete_item)) {
+                onDeleteItem()
                 true
             }
         )
@@ -228,8 +235,8 @@ private fun Preview() {
                         createdAt = Date(Date().time + 86400000),
                         changedAt = null
                     ),
-                    onCheckedChange = {},
-                ) {}
+                    {}, {}, {}
+                )
             }
         }
     }
