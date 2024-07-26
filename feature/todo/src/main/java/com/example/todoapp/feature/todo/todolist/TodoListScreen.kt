@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -40,6 +41,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.todoapp.core.designsystem.theme.AppTheme
 import com.example.todoapp.core.model.Importance
 import com.example.todoapp.core.model.TodoItem
+import com.example.todoapp.feature.todo.R
 import com.example.todoapp.feature.todo.todolist.components.TodoListItem
 import com.example.todoapp.feature.todo.todolist.components.TopBar
 import com.example.todoapp.feature.todo.todolist.model.TodoListScreenState
@@ -125,7 +127,7 @@ private fun Screen(
             FloatingActionButton(onClick = onFabClick) {
                 Icon(
                     imageVector = Icons.Rounded.Add,
-                    contentDescription = "Добавить элемент в список дел",
+                    contentDescription = stringResource(R.string.todo_list_add_item_description),
                 )
             }
         },
@@ -203,11 +205,11 @@ private fun ScreenEmpty() {
     ) {
         Spacer(Modifier.weight(2f))
         Text(
-            text = "Список пуст",
+            text = stringResource(R.string.todo_list_empty_list),
             style = MaterialTheme.typography.displaySmall,
         )
         Spacer(Modifier.height(8.dp))
-        Text(text = "Добавляйте элементы в ваш список дел")
+        Text(text = stringResource(R.string.todo_list_empty_list_supporting_text))
         Spacer(Modifier.weight(3f))
     }
 }
