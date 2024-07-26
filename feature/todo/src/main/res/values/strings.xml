@@ -18,13 +18,18 @@
     <string name="todo_list_top_bar_app_info_description">Информация о приложении</string>
     <string name="todo_list_top_bar_show_completed_description">Показывать выполненные задачи</string>
     <string name="todo_list_top_bar_settings_description">Настройки приложения</string>
-    <string name="todo_list_item_deadline_description">Deadline: </string>
+    <string name="todo_list_item_deadline_description">Deadline: %1$s</string>
 
 
     <!-- Item -->
     <string name="todo_item_top_bar_save">Сохранить</string>
+    <string name="todo_item_deadline">Сделать до</string>
 
     <!-- Descriptions -->
     <string name="todo_item_top_bar_back">Закрыть экран задачи</string>
+    <string name="todo_item_deadline_description">Deadline</string>
+    <string name="todo_item_select_deadline_description">Выбрать дату</string>
+    <string name="todo_item_cancel_deadline_description">Убрать Deadline</string>
+    <string name="todo_item_delete_description">Удалить задачу</string>
 
 </resources>

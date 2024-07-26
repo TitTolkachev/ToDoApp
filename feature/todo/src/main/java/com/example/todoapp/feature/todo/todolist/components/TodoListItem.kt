@@ -202,8 +202,12 @@ private fun Modifier.accessibilityDescription(
                 HIGH -> R.string.todo_list_item_importance_high
             }
         ) + item.text + (item.deadline?.let {
-            ". ${resources.getString(R.string.todo_list_item_deadline_description)}" +
+            ". ${
+                resources.getString(
+                    R.string.todo_list_item_deadline_description,
                     formatter.format(it)
+                )
+            }"
         } ?: "")
     }
 }
