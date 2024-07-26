@@ -3,7 +3,12 @@
     <string name="todo_list_top_bar_title">Мои дела</string>
     <string name="todo_list_top_bar_done">Выполнено: %1$d</string>
     <string name="todo_list_top_bar_old_data">Данные устарели</string>
-
+    <string name="todo_list_mark_item_done">Отметить выполненным</string>
+    <string name="todo_list_mark_item_not_done">Отметить невыполненным</string>
+    <string name="todo_list_show_item">Открыть</string>
+    <string name="todo_list_item_importance_low">Неважная задача: </string>
+    <string name="todo_list_item_importance_medium">Задача: </string>
+    <string name="todo_list_item_importance_high">Важная задача: </string>
 
     <!-- Descriptions -->
     <string name="todo_list_top_bar_done_description">%1$d выполненных дел в списке. </string>
@@ -12,4 +17,5 @@
     <string name="todo_list_top_bar_app_info_description">Информация о приложении</string>
     <string name="todo_list_top_bar_show_completed_description">Показывать выполненные задачи</string>
     <string name="todo_list_top_bar_settings_description">Настройки приложения</string>
+    <string name="todo_list_item_deadline_description">Deadline: </string>
 </resources>
