@@ -7,6 +7,7 @@
     <string name="todo_list_mark_item_done">Отметить выполненным</string>
     <string name="todo_list_mark_item_not_done">Отметить невыполненным</string>
     <string name="todo_list_show_item">Открыть</string>
+    <string name="todo_list_delete_item">Удалить задачу</string>
     <string name="todo_list_item_importance_low">Неважная задача: </string>
     <string name="todo_list_item_importance_medium">Задача: </string>
     <string name="todo_list_item_importance_high">Важная задача: </string>
