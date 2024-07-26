@@ -33,6 +33,9 @@
     },
     "custom_image": {
       "type": "container",
+      "accessibility": {
+        "mode": "exclude"
+      },
       "items": [
         {
           "type": "state",
@@ -52,6 +55,7 @@
               "div": {
                 "type": "image",
                 "image_url": "https://www.androidauthority.com/wp-content/uploads/2016/05/android-meme-03.jpg.webp",
+                "placeholder_color": "#00000000",
                 "width": {
                   "type": "fixed",
                   "value": 250
@@ -65,6 +69,7 @@
               "div": {
                 "type": "image",
                 "image_url": "https://cs14.pikabu.ru/post_img/2023/04/27/11/1682618822268938947.jpg",
+                "placeholder_color": "#00000000",
                 "width": {
                   "type": "fixed",
                   "value": 300
@@ -78,6 +83,7 @@
               "div": {
                 "type": "image",
                 "image_url": "https://dev.by/storage/images/31/30/82/36/derived/0628806c48ef793b7480ec9a53e8dcc1.jpg",
+                "placeholder_color": "#00000000",
                 "width": {
                   "type": "fixed",
                   "value": 300
@@ -91,6 +97,7 @@
               "div": {
                 "type": "image",
                 "image_url": "https://preview.redd.it/thbglcta6qu71.jpg?auto=webp&s=a722d6e5cef2b65423cf79a421a1bbd32c50b4dc",
+                "placeholder_color": "#00000000",
                 "width": {
                   "type": "fixed",
                   "value": 300
@@ -104,6 +111,7 @@
               "div": {
                 "type": "image",
                 "image_url": "https://avatars.dzeninfra.ru/get-zen_doc/59919/pub_5ad2489d5991d3e3d13c7479_5ad248c1bcf1bcc1f294891d/scale_1200",
+                "placeholder_color": "#00000000",
                 "width": {
                   "type": "fixed",
                   "value": 250
@@ -135,7 +143,12 @@
             {
               "type": "image",
               "image_url": "https://www.svgrepo.com/show/415928/close-mobile-ui.svg",
-              "tint_color": "#000000",
+              "tint_color": "#919191",
+              "placeholder_color": "#00000000",
+              "accessibility": {
+                "description": "Закрыть экран информации о приложении",
+                "type": "button"
+              },
               "width": {
                 "type": "fixed",
                 "value": 24
@@ -161,7 +174,7 @@
               "text": "ToDoApp",
               "text_alignment_horizontal": "center",
               "text_alignment_vertical": "center",
-              "text_color": "#000000"
+              "text_color": "#919191"
             },
             {
               "type": "text",
@@ -169,7 +182,7 @@
               "text": "Приложение для ведения списка дел",
               "text_alignment_horizontal": "center",
               "text_alignment_vertical": "center",
-              "text_color": "#000000",
+              "text_color": "#919191",
               "paddings": {
                 "top": 4,
                 "bottom": 4,
@@ -183,7 +196,7 @@
               "text": "(А здесь можно листать мемы)",
               "text_alignment_horizontal": "center",
               "text_alignment_vertical": "center",
-              "text_color": "#000000"
+              "text_color": "#919191"
             },
             {
               "type": "gallery",
@@ -207,6 +220,10 @@
                       "color": "#3cf843"
                     }
                   ],
+                  "accessibility": {
+                    "description": "Цена за кофе - 4 бакса, цена за айкофе - 12 баксов. Don't be an iDiot.",
+                    "type": "text"
+                  },
                   "clicked_on_number": "div-action://set_state?state_id=0/image_id/1",
                   "clicked_on_number_log_id": "clicked_on_1"
                 },
@@ -219,6 +236,10 @@
                       "color": "#e6a500"
                     }
                   ],
+                  "accessibility": {
+                    "description": "Android: Файл успешно сохранен. Я: куда он сохранен? Android: хрен его знает.",
+                    "type": "text"
+                  },
                   "clicked_on_number": "div-action://set_state?state_id=0/image_id/2",
                   "clicked_on_number_log_id": "clicked_on_2"
                 },
@@ -231,6 +252,10 @@
                       "color": "#ffea00"
                     }
                   ],
+                  "accessibility": {
+                    "description": "HR в столице: Опыт? Образование? Курсы? Навыки? Суперспособности? HR в регионах: судимы?",
+                    "type": "text"
+                  },
                   "clicked_on_number": "div-action://set_state?state_id=0/image_id/3",
                   "clicked_on_number_log_id": "clicked_on_3"
                 },
@@ -243,6 +268,10 @@
                       "color": "#cf99f6"
                     }
                   ],
+                  "accessibility": {
+                    "description": "Ненавижу себя. Cи плюс плюс. Вау! Я ненавижу тебя больше.",
+                    "type": "text"
+                  },
                   "clicked_on_number": "div-action://set_state?state_id=0/image_id/4",
                   "clicked_on_number_log_id": "clicked_on_4"
                 },
@@ -255,6 +284,10 @@
                       "color": "#44dee9"
                     }
                   ],
+                  "accessibility": {
+                    "description": "Почтальон Печкин: Вам посылка с XIAOMI пришла, но я вам ее не отдам. Потому, что у вас свой дом есть. А тем, у кого дом есть - не положено.",
+                    "type": "text"
+                  },
                   "clicked_on_number": "div-action://set_state?state_id=0/image_id/5",
                   "clicked_on_number_log_id": "clicked_on_5"
                 }

@@ -1,14 +1,10 @@
 package com.example.todoapp.feature.todo.todolist
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,22 +15,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.Refresh
-import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.TopAppBarDefaults.pinnedScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,7 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -51,13 +41,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.todoapp.core.designsystem.theme.AppTheme
 import com.example.todoapp.core.model.Importance
 import com.example.todoapp.core.model.TodoItem
+import com.example.todoapp.feature.todo.R
 import com.example.todoapp.feature.todo.todolist.components.TodoListItem
+import com.example.todoapp.feature.todo.todolist.components.TopBar
 import com.example.todoapp.feature.todo.todolist.model.TodoListScreenState
 import com.example.todoapp.feature.todo.todolist.model.TodoListScreenState.EMPTY
 import com.example.todoapp.feature.todo.todolist.model.TodoListScreenState.LOADING
 import com.example.todoapp.feature.todo.todolist.model.TodoListScreenState.VIEW
 import java.util.Date
-import com.example.todoapp.core.designsystem.R as UiR
 
 @Composable
 fun TodoListScreen(
@@ -84,6 +75,7 @@ fun TodoListScreen(
         dataIsActual = viewModel.dataIsActual.collectAsStateWithLifecycle().value,
 
         onSyncClick = { viewModel.sync() },
+        onDeleteItem = { viewModel.deleteItem(it) },
         onItemClick = navigateToItem,
         onItemCheckBoxClick = { id, completed ->
             viewModel.changeItemCompletionStatus(id, completed)
@@ -106,6 +98,7 @@ private fun Screen(
     dataIsActual: Boolean? = true,
 
     onSyncClick: () -> Unit = {},
+    onDeleteItem: (id: String) -> Unit = {},
     onItemClick: (String) -> Unit = {},
     onItemCheckBoxClick: (id: String, done: Boolean) -> Unit = { _, _ -> },
     onFabClick: () -> Unit = {},
@@ -113,8 +106,7 @@ private fun Screen(
     onInfoIconClick: () -> Unit = {},
     onSettingsIconClick: () -> Unit = {},
 ) {
-    val scrollBehavior =
-        TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior = pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -135,7 +127,7 @@ private fun Screen(
             FloatingActionButton(onClick = onFabClick) {
                 Icon(
                     imageVector = Icons.Rounded.Add,
-                    contentDescription = "Добавить элемент в список дел",
+                    contentDescription = stringResource(R.string.todo_list_add_item_description),
                 )
             }
         },
@@ -147,88 +139,12 @@ private fun Screen(
         ) {
             when (it) {
                 LOADING -> ScreenLoading()
-                VIEW -> ScreenView(items, onItemCheckBoxClick, onItemClick)
+                VIEW -> ScreenView(items, onItemCheckBoxClick, onItemClick, onDeleteItem)
                 EMPTY -> ScreenEmpty()
             }
         }
     }
 }
-
-@Composable
-@OptIn(ExperimentalMaterial3Api::class)
-private fun TopBar(
-    scrollBehavior: TopAppBarScrollBehavior,
-    showCompletedTasks: Boolean,
-    completedTasksCount: Int,
-    dataIsActual: Boolean? = true,
-    onSyncClick: () -> Unit,
-    onChangeCompletedTasksVisibilityClick: () -> Unit,
-    onInfoIconClick: () -> Unit = {},
-    onSettingsIconClick: () -> Unit = {},
-) {
-    TopAppBar(
-        title = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Column {
-                    Text(text = "Мои дела")
-                    Text(
-                        text = "Выполнено: $completedTasksCount",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-                AnimatedVisibility(
-                    visible = dataIsActual == false,
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        IconButton(onClick = onSyncClick) {
-                            Icon(
-                                imageVector = Icons.Rounded.Refresh,
-                                contentDescription = "Обновить",
-                                tint = MaterialTheme.colorScheme.error
-                            )
-                        }
-                        Text(
-                            text = "Данные устарели",
-                            color = MaterialTheme.colorScheme.error,
-                            style = MaterialTheme.typography.labelSmall
-                        )
-                    }
-                }
-            }
-        },
-        actions = {
-            IconButton(onClick = onInfoIconClick) {
-                Icon(
-                    imageVector = Icons.Rounded.Info,
-                    contentDescription = "Информация о приложении"
-                )
-            }
-            IconButton(onClick = onChangeCompletedTasksVisibilityClick) {
-                if (showCompletedTasks) {
-                    Icon(
-                        painter = painterResource(id = UiR.drawable.ic_invisible_24),
-                        contentDescription = "Скрыть выполненные задачи"
-                    )
-                } else {
-                    Icon(
-                        painter = painterResource(id = UiR.drawable.ic_visible_24),
-                        contentDescription = "Показать выполненные задачи"
-                    )
-                }
-            }
-            IconButton(onClick = onSettingsIconClick) {
-                Icon(
-                    imageVector = Icons.Rounded.Settings,
-                    contentDescription = "Настройки приложения"
-                )
-            }
-        },
-        scrollBehavior = scrollBehavior
-    )
-}
-
 
 @Composable
 private fun ScreenLoading() {
@@ -241,7 +157,8 @@ private fun ScreenLoading() {
 private fun ScreenView(
     items: List<TodoItem>,
     onItemCheckBoxClick: (id: String, done: Boolean) -> Unit,
-    onItemClick: (String) -> Unit
+    onItemClick: (String) -> Unit,
+    onDeleteItem: (id: String) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -263,6 +180,7 @@ private fun ScreenView(
                 item = item,
                 onClick = { onItemClick(item.id) },
                 onCheckedChange = { done -> onItemCheckBoxClick(item.id, done) },
+                onDeleteItem = { onDeleteItem(item.id) },
             )
         }
         if (items.isNotEmpty()) {
@@ -287,11 +205,11 @@ private fun ScreenEmpty() {
     ) {
         Spacer(Modifier.weight(2f))
         Text(
-            text = "Список пуст",
+            text = stringResource(R.string.todo_list_empty_list),
             style = MaterialTheme.typography.displaySmall,
         )
         Spacer(Modifier.height(8.dp))
-        Text(text = "Добавляйте элементы в ваш список дел")
+        Text(text = stringResource(R.string.todo_list_empty_list_supporting_text))
         Spacer(Modifier.weight(3f))
     }
 }

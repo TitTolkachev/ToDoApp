@@ -75,6 +75,14 @@ class TodoListViewModel @Inject constructor(
         todoItemsRepository.sync()
     }
 
+    fun deleteItem(id: String) = viewModelScope.launch(Dispatchers.Default + exceptionHandler) {
+        val list = _items.value
+        val updatedList = list?.minus(list.first { it.id == id })
+        _items.update { updatedList }
+        _completedTasksCount.update { updatedList?.count { it.done } ?: 0 }
+        todoItemsRepository.deleteItem(id)
+    }
+
     private fun listenToTaskList() = combine(
         _showCompletedTasks,
         _allItems,

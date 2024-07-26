@@ -17,7 +17,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.todoapp.feature.todo.R
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,7 +34,7 @@ internal fun TopBar(
             IconButton(onClick = onNavigateBackClick) {
                 Icon(
                     imageVector = Icons.Rounded.Close,
-                    contentDescription = "Закрыть экран TODO элемента",
+                    contentDescription = stringResource(R.string.todo_item_top_bar_back),
                 )
             }
         },
@@ -52,7 +54,7 @@ internal fun TopBar(
                     disabledContentColor = MaterialTheme.colorScheme.outline,
                 )
             ) {
-                Text(text = "Сохранить".uppercase())
+                Text(text = stringResource(R.string.todo_item_top_bar_save).uppercase())
             }
         }
     )
