@@ -18,10 +18,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.isTraversalGroup
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.todoapp.core.designsystem.theme.AppTheme
+import com.example.todoapp.feature.auth.R
 import com.yandex.authsdk.YandexAuthLoginOptions
 import com.yandex.authsdk.YandexAuthOptions
 import com.yandex.authsdk.YandexAuthSdk
@@ -71,28 +77,40 @@ private fun Screen(
             modifier = Modifier
                 .padding(contentPadding)
                 .padding(16.dp)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .semantics { isTraversalGroup = true },
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.weight(1f))
 
-            Text(text = "ToDoApp", style = MaterialTheme.typography.displayMedium)
+            Text(
+                modifier = Modifier.semantics {
+                    heading()
+                    traversalIndex = 1f
+                },
+                text = stringResource(R.string.title),
+                style = MaterialTheme.typography.displayMedium
+            )
             Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "Добро пожаловать!")
+            Text(
+                modifier = Modifier.semantics { traversalIndex = 2f },
+                text = stringResource(R.string.welcome),
+            )
 
             Spacer(modifier = Modifier.weight(1f))
 
             Button(
-                modifier = Modifier,
+                modifier = Modifier.semantics { traversalIndex = 4f },
                 onClick = onLoginClick
             ) {
-                Text(text = "Войти")
+                Text(text = stringResource(R.string.enter))
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Войдите через Яндекс.ID, чтобы продолжить",
+                modifier = Modifier.semantics { traversalIndex = 3f },
+                text = stringResource(R.string.use_yandex_id),
                 style = MaterialTheme.typography.bodySmall
             )
 

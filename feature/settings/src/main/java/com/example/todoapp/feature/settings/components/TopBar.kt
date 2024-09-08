@@ -17,7 +17,7 @@ internal fun TopBar(
     onNavigateBackClick: () -> Unit,
 ) {
     CenterAlignedTopAppBar(
-        title = { Text(text = stringResource(id = R.string.title)) },
+        title = { Text(text = stringResource(id = R.string.settings_title)) },
         navigationIcon = {
             IconButton(onClick = onNavigateBackClick) {
                 Icon(

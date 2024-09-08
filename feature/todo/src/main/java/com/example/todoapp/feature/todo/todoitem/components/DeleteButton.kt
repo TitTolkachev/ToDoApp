@@ -17,9 +17,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.example.todoapp.core.designsystem.theme.AppTheme
+import com.example.todoapp.feature.todo.R
 
 @Composable
 internal fun DeleteButton(deleting: Boolean, onDeleteClick: () -> Unit) {
@@ -35,10 +38,13 @@ internal fun DeleteButton(deleting: Boolean, onDeleteClick: () -> Unit) {
             Icon(
                 modifier = Modifier.size(24.dp),
                 imageVector = Icons.Rounded.Delete,
-                contentDescription = "Удалить TODO элемент"
+                contentDescription = stringResource(R.string.todo_item_delete_description)
             )
             Spacer(Modifier.width(12.dp))
-            Text(text = "Удалить")
+            Text(
+                modifier = Modifier.clearAndSetSemantics { },
+                text = "Удалить"
+            )
         }
         Spacer(Modifier.width(8.dp))
         AnimatedVisibility(visible = deleting) {

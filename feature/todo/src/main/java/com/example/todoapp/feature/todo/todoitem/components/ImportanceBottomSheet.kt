@@ -17,6 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
@@ -25,6 +28,7 @@ import com.example.todoapp.core.model.Importance
 import com.example.todoapp.core.model.Importance.HIGH
 import com.example.todoapp.core.model.Importance.LOW
 import com.example.todoapp.core.model.Importance.MEDIUM
+import com.example.todoapp.feature.todo.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,17 +51,23 @@ internal fun ImportanceBottomSheet(
                 horizontalAlignment = CenterHorizontally,
             ) {
                 Item(
-                    text = "Нет",
+                    text = stringResource(R.string.todo_item_importance_medium),
+                    contentDescription = stringResource(R.string.todo_item_importance_bs_medium_description),
+                    onClickLabel = stringResource(R.string.todo_item_apply_importance_description),
                     onClick = { onImportanceChange(MEDIUM); onHide() }
                 )
                 HorizontalDivider()
                 Item(
-                    text = "Низкий",
+                    text = stringResource(R.string.todo_item_importance_low),
+                    contentDescription = stringResource(R.string.todo_item_importance_bs_low_description),
+                    onClickLabel = stringResource(R.string.todo_item_apply_importance_description),
                     onClick = { onImportanceChange(LOW); onHide() }
                 )
                 HorizontalDivider()
                 Item(
-                    text = "Высокий",
+                    text = stringResource(R.string.todo_item_importance_high),
+                    contentDescription = stringResource(R.string.todo_item_importance_bs_high_description),
+                    onClickLabel = stringResource(R.string.todo_item_apply_importance_description),
                     onClick = { onImportanceChange(HIGH); onHide() }
                 )
             }
@@ -68,6 +78,8 @@ internal fun ImportanceBottomSheet(
 @Composable
 private fun Item(
     text: String,
+    contentDescription: String? = null,
+    onClickLabel: String? = null,
     onClick: () -> Unit = {}
 ) {
     Text(
@@ -75,8 +87,9 @@ private fun Item(
             .padding(4.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .clickable(onClick = onClick)
-            .padding(12.dp),
+            .clickable(onClick = onClick, onClickLabel = onClickLabel)
+            .padding(12.dp)
+            .semantics { this.contentDescription = contentDescription ?: text },
         text = text,
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.bodyLarge

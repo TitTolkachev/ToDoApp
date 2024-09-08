@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title">ToDoApp</string>
+    <string name="welcome">Добро пожаловать!</string>
+    <string name="use_yandex_id">Войдите через Яндекс.ID, чтобы продолжить</string>
+    <string name="enter">Войти</string>
+</resources>
